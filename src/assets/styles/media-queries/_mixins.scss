@@ -1,0 +1,7 @@
+@use '../vars';
+
+@mixin mq($size) {
+  @media screen and (min-width: map-get(vars.$breakpts,$size)) {
+    @content;
+  }
+}

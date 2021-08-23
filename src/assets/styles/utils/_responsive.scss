@@ -1,0 +1,25 @@
+@use '../vars';
+
+@mixin _display-class($display-val, $breakpt: null, $min-width: null) {
+  @if (not $breakpt) {
+    .d-#{$display-val} {
+      display: $display-val;
+    }
+  } @else {
+    @media screen and (min-width: $min-width) {
+      .d-#{$breakpt}-#{$display-val} {
+        display: $display-val;
+      }
+    }
+  }
+}
+
+@include _display-class(none);
+@include _display-class(inline);
+@include _display-class(block);
+
+@each $bp, $min-width in vars.$breakpts {
+  @include _display-class(none, $bp, $min-width);
+  @include _display-class(inline, $bp, $min-width);
+  @include _display-class(block, $bp, $min-width);
+}

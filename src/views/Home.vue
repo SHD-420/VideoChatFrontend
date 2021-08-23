@@ -1,25 +1,23 @@
 <template>
-  <div>
-    <p>Count is {{counter}}</p>
-    <button @click="increment">Increment</button>
+  <div class="home-view">
+    <hero-section ref="heroSection"></hero-section>
+    <overview-section
+      @go-up-clicked="$refs.heroSection.$el.scrollIntoView()"
+    ></overview-section>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, Ref, ref } from "vue";
+import HeroSection from "@/components/home/HeroSection.vue";
+import OverviewSection from "@/components/home/OverviewSection.vue";
+import { defineComponent } from "vue";
 
 export default defineComponent({
-  setup() {
-    const counter: Ref<number> = ref(0);
-
-    function increment() {
-      counter.value++;
-    }
-
-    return { counter, increment };
-  },
+  components: { HeroSection, OverviewSection },
+  setup() {},
 });
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@include media-queries.home-view;
 </style>

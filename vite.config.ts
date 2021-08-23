@@ -5,6 +5,17 @@ import path from "path";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [vue()],
+  server:{
+    host: true,
+  },
+  css:{
+    preprocessorOptions: {
+      scss: {
+        additionalData : `@use "@/assets/styles" as *;
+                          @use '@/assets/styles/media-queries';`,
+      }
+    }
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "/src"),

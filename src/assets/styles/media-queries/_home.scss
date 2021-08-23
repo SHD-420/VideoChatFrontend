@@ -1,0 +1,96 @@
+@use '../vars';
+@use 'mixins' as *;
+
+@mixin home-view {
+  .home-view {
+    @include mq(md) {
+      background-image: url(@/assets/images/home-desktop.svg);
+      background-repeat: no-repeat;
+      background-size: 100% 100vh;
+    }
+  }
+}
+
+@mixin hero-section {
+  .hero {
+    $self: &;
+    @include mq(md) {
+      &__head {
+        color: vars.$secondary;
+      }
+      &__body {
+        width: fit-content;
+        display: grid;
+        column-gap: 1rem;
+        grid-auto-flow: column;
+        grid-template-columns: repeat(2, minmax(0, 300px));
+        margin: 5rem auto;
+        img {
+          max-width: 100%;
+          transform: translateY(2.5rem);
+        }
+      }
+      &__dot {
+        border-radius: 0.25rem;
+        display: block;
+        background-color: vars.$secondary;
+        width: 0.75rem;
+        height: 0.75rem;
+        transform: rotate(-45deg);
+        margin: 0 1rem;
+      }
+    }
+  }
+}
+
+@mixin hero-section-form {
+  .hero-form {
+    @include mq(sm) {
+      margin: 0 20vw;
+    }
+    @include mq(md) {
+      background-color: transparent;
+      box-shadow: none;
+      transform: none;
+      margin: 0;
+      padding: 0;
+    }
+  }
+}
+
+@mixin overview-section {
+  .overview {
+    @include mq(sm) {
+      &__head {
+        text-align: center;
+      }
+      &__body ul li {
+        padding-left: 4rem;
+      }
+    }
+
+    @include mq(md) {
+      max-width: 80vw;
+      margin: 8rem auto 2rem auto;
+
+      &__body {
+        ul {
+          margin: auto;
+          width: fit-content;
+          margin-bottom: 4rem;
+          li {
+            padding-left: 0;
+            border-left: 0;
+            display: grid;
+            grid-auto-flow: column;
+            justify-content: start;
+            column-gap: 2rem;
+          }
+        }
+      }
+    }
+    @include mq(lg){
+      max-width: 60vw;
+    }
+  }
+}

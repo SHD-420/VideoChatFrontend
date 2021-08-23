@@ -1,0 +1,22 @@
+@use '../vars';
+
+p{
+  line-height: 1.75;
+}
+
+.text-primary {
+  color: vars.$primary;
+}
+.text-secondary {
+  color: vars.$secondary;
+}
+
+.text-bold {
+  font-weight: 800;
+}
+.text-medium {
+  font-weight: 500;
+}
+.text-light {
+  font-weight: 400;
+}

@@ -1,0 +1,41 @@
+@use '../vars';
+
+$_hover_darken_amoount: 20%;
+
+button,
+.btn {  
+  border: none;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.2s;
+  background-color: transparent;
+
+  &:focus {
+    outline: none;
+  }
+
+  &.primary {
+    background-color: vars.$primary;
+    color: vars.$light1;
+
+    &:focus {
+      box-shadow: 0 0 0 0.2rem rgba(vars.$primary, 0.5);
+    }
+
+    &:hover {
+      background-color: darken(vars.$primary, $_hover_darken_amoount);
+    }
+  }
+
+  &.primary-outlined {
+    border: 2px solid vars.$primary;
+    color: vars.$primary;
+
+    &:hover {
+      border-color: transparent;
+      @extend .primary;
+    }
+  }
+}
