@@ -17,9 +17,11 @@
 @include _display-class(none);
 @include _display-class(inline);
 @include _display-class(block);
+@include _display-class(flex);
 
 @each $bp, $min-width in vars.$breakpts {
   @include _display-class(none, $bp, $min-width);
   @include _display-class(inline, $bp, $min-width);
   @include _display-class(block, $bp, $min-width);
+  @include _display-class(flex, $bp, $min-width);
 }

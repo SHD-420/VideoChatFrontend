@@ -1,27 +1,32 @@
 <template>
   <div class="hero-form">
-    <form class="input-group">
+    <form class="input-group" @submit.prevent>
       <input type="text" placeholder="Your room id" />
-      <button type="submit" class="primary-outlined" @click.prevent>
-        Join
-      </button>
+      <button type="submit" class="primary-outlined">Join</button>
     </form>
     <!-- <form>
       <button type="submit" class="primary-outlined">Join a room</button>
     </form> -->
     <p class="text-primary d-md-none">or</p>
-    <form>
+    <form @submit.prevent="shouldShowAuth = true">
       <button type="submit" class="primary">Create a room</button>
     </form>
   </div>
+  <auth-modal v-model:should-show="shouldShowAuth"></auth-modal>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { useStore } from "@/store";
+import { defineComponent, ref } from "vue";
+import AuthModal from "./AuthModal.vue";
 
 export default defineComponent({
+  components: { AuthModal },
   setup() {
-    return {};
+    console.log(useStore().state.username);
+    return {
+      shouldShowAuth: ref(false),
+    };
   },
 });
 </script>

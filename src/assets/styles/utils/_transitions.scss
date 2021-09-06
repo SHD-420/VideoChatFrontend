@@ -1,0 +1,21 @@
+@mixin _simple-transition($transition-name, $duration: 0.2s) {
+  .#{$transition-name}-enter-active,
+  .#{$transition-name}-leave-active {
+    transition-duration: $duration;
+    transition-timing-function: ease-out;
+  }
+
+  .#{$transition-name}-enter-from,
+  .#{$transition-name}-leave-to {
+    @content;
+  }
+}
+
+@include _simple-transition(fade){
+  opacity: 0;
+}
+
+@include _simple-transition(slide-y){
+  transform: translateY(100px);
+  opacity: 0;
+}
