@@ -1,21 +1,29 @@
-export enum AvatarURLS {
-  DEFAULT = "https://wallpapercave.com/wp/wc1709187.jpg",
-  A1 = "https://c4.wallpaperflare.com/wallpaper/501/399/582/anime-naruto-madara-uchiha-wallpaper-preview.jpg",
-  A2 = "https://wallpapercave.com/wp/wp8241464.jpg",
-  A3 = "https://wallpapercave.com/wp/wp5823743.jpg",
-}
-
-export enum LocalStorageKeys {
-  USERNAME = "username",
-  AVATAR = "avatar",
-}
+import { AuthState } from "./modules/auth/types";
+import { CommitOptions, Store } from "vuex";
+import { ModalState } from "./modules/modal/types";
+import { AuthMutations } from "./modules/auth/mutations";
+import { ModalMutations } from "./modules/modal/mutations";
+import { RoomMutations } from "./modules/room/mutations";
+import { RoomState } from "./modules/room/types";
+import { RoomGetters } from "./modules/room/getters";
 
 export interface RootState {
-  username?: string | null;
-  avatar?: AvatarURLS | null;
+  auth: AuthState;
+  modal: ModalState;
+  room: RoomState;
 }
 
-export enum MutationTypes {
-  SET_AVATAR = "SET_AVATAR",
-  SET_USERNAME = "SET_USERNAME",
-}
+type Mutations = AuthMutations & ModalMutations & RoomMutations;
+type Getters = RoomGetters;
+
+export type TypedStore = Omit<Store<RootState>, "commit" | "getters"> & {
+  commit<K extends keyof Mutations, P extends Parameters<Mutations[K]>[1]>(
+    key: K,
+    payload: P,
+    options?: CommitOptions
+  ): ReturnType<Mutations[K]>;
+
+  getters: {
+    [k in keyof Getters]: ReturnType<Getters[k]>;
+  };
+};

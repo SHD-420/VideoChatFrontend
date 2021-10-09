@@ -1,7 +1,7 @@
 <template>
   <teleport to="#modals">
     <transition name="fade" @afterEnter="shouldShowContent = true">
-      <div class="base-modal" v-if="modelValue">
+      <div class="base-modal" v-if="shouldShowModal">
         <transition name="slide-y">
           <div class="base-modal__content" v-show="shouldShowContent">
             <div class="base-modal__head">
@@ -10,7 +10,7 @@
               </button>
             </div>
             <div class="base-modal__body">
-              <slot></slot>
+              <component :is="cuurrentModalComponent" />
             </div>
           </div>
         </transition>
@@ -20,23 +20,27 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "@vue/runtime-core";
+import { computed, defineComponent, ref } from "vue";
+import { useStore } from "@/store";
+import { ModalMutationTypes } from "@/store/modules/modal/types";
 
 export default defineComponent({
-  props: {
-    modelValue: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  setup(_, { emit }) {
+  setup() {
+    const store = useStore();
+
+    const shouldShowModal = computed(() => store.state.modal?.shouldShow);
+    const cuurrentModalComponent = computed(() => store.state.modal?.component);
     const shouldShowContent = ref(false);
+
     function closeModal() {
       shouldShowContent.value = false;
-      emit("update:modelValue", false);
+      store.commit(ModalMutationTypes.HIDE_MODAL);
     }
+
     return {
       closeModal,
+      shouldShowModal,
+      cuurrentModalComponent,
       shouldShowContent,
     };
   },

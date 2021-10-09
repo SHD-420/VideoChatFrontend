@@ -1,7 +1,10 @@
 <template>
   <div class="hero">
     <div class="hero__head">
-      <img src="@/assets/images/home-mobile.svg" class="hero__mobile-bg d-md-none"/>
+      <img
+        src="@/assets/images/home-mobile.svg"
+        class="hero__mobile-bg d-md-none"
+      />
       <div class="hero__title">
         <h1>FlashRooms</h1>
         <div class="hero__tagline">
@@ -12,18 +15,39 @@
       </div>
     </div>
     <div class="hero__body">
-      <img src="@/assets/images/home-image.svg" class="d-none d-md-inline">
-      <hero-section-form></hero-section-form>
+      <img src="@/assets/images/home-image.svg" class="d-none d-md-inline" />
+      <hero-section-form
+        @create-room-request="createRoom"
+        @join-room-request="joinRoom"
+      />
     </div>
   </div>
 </template>
 
 <script lang="ts">
+import { useWebSockets } from "@/plugins/WebSockets";
 import { defineComponent } from "@vue/runtime-core";
+import { useRouter } from "@/router";
+import { RouteNames } from "@/router/types";
 import HeroSectionForm from "./HeroSectionForm.vue";
 
 export default defineComponent({
   components: { HeroSectionForm },
+  setup() {
+    const ws = useWebSockets();
+    const router = useRouter();
+
+    function createRoom() {
+      ws.createRoom().then(() => router.push({ name: RouteNames.Room }));
+      // .catch((error) => console.log("error"))
+    }
+    function joinRoom(roomId: string) {
+      console.log("please wait");
+      ws.joinRoom(roomId).then(() => router.push({ name: RouteNames.Room }));
+    }
+
+    return { createRoom, joinRoom };
+  },
 });
 </script>
 

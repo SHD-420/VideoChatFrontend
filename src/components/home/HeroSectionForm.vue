@@ -1,31 +1,43 @@
 <template>
   <div class="hero-form">
-    <form class="input-group" @submit.prevent>
-      <input type="text" placeholder="Your room id" />
+    <form class="input-group" @submit.prevent="joinRoom">
+      <input type="text" placeholder="Your room id" v-model="roomIdInput" />
       <button type="submit" class="primary-outlined">Join</button>
     </form>
-    <!-- <form>
-      <button type="submit" class="primary-outlined">Join a room</button>
-    </form> -->
     <p class="text-primary d-md-none">or</p>
-    <form @submit.prevent="shouldShowAuth = true">
+    <form @submit.prevent="createRoom">
       <button type="submit" class="primary">Create a room</button>
     </form>
   </div>
-  <auth-modal v-model:should-show="shouldShowAuth"></auth-modal>
+  <base-modal />
 </template>
 
 <script lang="ts">
 import { useStore } from "@/store";
+import { ModalMutationTypes } from "@/store/modules/modal/types";
 import { defineComponent, ref } from "vue";
-import AuthModal from "./AuthModal.vue";
 
 export default defineComponent({
-  components: { AuthModal },
-  setup() {
-    console.log(useStore().state.username);
+  emits: ["create-room-request", "join-room-request"],
+  setup(_, { emit }) {
+    const store = useStore();
+    const roomIdInput = ref("");
+
+    function createRoom() {
+      store.commit(ModalMutationTypes.SHOW_AUTH_MODAL, () =>
+        emit("create-room-request")
+      );
+    }
+    function joinRoom() {
+      store.commit(ModalMutationTypes.SHOW_AUTH_MODAL, () =>
+        emit("join-room-request", roomIdInput.value)
+      );
+    }
+
     return {
-      shouldShowAuth: ref(false),
+      roomIdInput,
+      createRoom,
+      joinRoom,
     };
   },
 });

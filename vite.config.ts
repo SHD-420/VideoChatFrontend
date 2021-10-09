@@ -6,7 +6,7 @@ import path from "path";
 export default defineConfig({
   plugins: [vue()],
   server:{
-    host: true,
+    host: '0.0.0.0'
   },
   css:{
     preprocessorOptions: {
