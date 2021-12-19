@@ -1,4 +1,4 @@
-@use '../vars';
+@use "../vars";
 
 $_hover_darken_amoount: 20%;
 
@@ -11,6 +11,29 @@ button,
   font-weight: 500;
   transition: 0.2s;
   background-color: transparent;
+
+  &.large {
+    font-size: 1.25rem;
+    padding: 1rem 1.5rem;
+  }
+
+  &.sharp {
+    border-radius: 0;
+  }
+
+  &.icon {
+    box-sizing: content-box;
+    padding: 1.25rem;
+    width: 1.5rem;
+    font-size: 1.25rem;
+    text-align: center;
+    border-radius: 50%;
+    &.small {
+      width: 1rem;
+      padding: 1rem;
+      font-size: 1rem;
+    }
+  }
 
   &:disabled,
   &.disabled {
@@ -32,6 +55,30 @@ button,
 
     &:hover {
       background-color: darken(vars.$primary, $_hover_darken_amoount);
+    }
+  }
+  &.secondary {
+    background-color: vars.$secondary;
+    color: vars.$light1;
+
+    &:focus {
+      box-shadow: 0 0 0 0.2rem rgba(vars.$secondary, 0.5);
+    }
+
+    &:hover {
+      background-color: darken(vars.$secondary, $_hover_darken_amoount);
+    }
+  }
+  &.error {
+    background-color: vars.$error;
+    color: vars.$light1;
+
+    &:focus {
+      box-shadow: 0 0 0 0.2rem rgba(vars.$error, 0.5);
+    }
+
+    &:hover {
+      background-color: darken(vars.$error, $_hover_darken_amoount);
     }
   }
 

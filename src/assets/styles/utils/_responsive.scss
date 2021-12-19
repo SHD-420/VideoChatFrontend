@@ -18,10 +18,18 @@
 @include _display-class(inline);
 @include _display-class(block);
 @include _display-class(flex);
+@include _display-class(grid);
 
 @each $bp, $min-width in vars.$breakpts {
   @include _display-class(none, $bp, $min-width);
   @include _display-class(inline, $bp, $min-width);
   @include _display-class(block, $bp, $min-width);
   @include _display-class(flex, $bp, $min-width);
+  @include _display-class(grid, $bp, $min-width);
+}
+
+//flex utilities
+
+.flex-grow{
+  flex-grow: 1;
 }

@@ -1,0 +1,49 @@
+$_spaces: (
+  xs: 0.25rem,
+  sm: 0.5rem,
+  md: 1rem,
+  lg: 1.5rem,
+  xl: 2.5rem,
+  xl2: 3rem,
+);
+
+@each $key, $val in $_spaces {
+  .p-#{$key} {
+    padding: $val;
+  }
+  .px-#{$key},
+  .pl-#{$key} {
+    padding-left: $val;
+  }
+  .px-#{$key},
+  .pr-#{$key} {
+    padding-right: $val;
+  }
+  .py-#{$key},
+  .pt-#{$key} {
+    padding-top: $val;
+  }
+  .py-#{$key},
+  .pb-#{$key} {
+    padding-bottom: $val;
+  }
+  .m-#{$key} {
+    margin: $val;
+  }
+  .mx-#{$key},
+  .ml-#{$key} {
+    margin-left: $val;
+  }
+  .mx-#{$key},
+  .mr-#{$key} {
+    margin-right: $val;
+  }
+  .my-#{$key},
+  .mt-#{$key} {
+    margin-top: $val;
+  }
+  .my-#{$key},
+  .mb-#{$key} {
+    margin-bottom: $val;
+  }
+}

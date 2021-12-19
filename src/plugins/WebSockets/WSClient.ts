@@ -10,16 +10,16 @@ interface WSOutgoingMessage {
   data?: any;
 }
 
-
-
 export class WSClient {
-  private _ws = new WebSocket("ws://localhost:8000");
+  // private _ws = new WebSocket("ws://localhost:8000");
   // private _ws = new WebSocket("ws://192.168.43.196:8000");
+  private _ws = new WebSocket("wss://video-chat-websocket-backend.herokuapp.com");
   private _socketId?: string;
   private _eventMapping: Array<{
     event: IncomingMessageTypes;
     handler: WSEventHandler;
   }> = [];
+  private _scheduledEmits: Array<WSOutgoingMessage> = [];
 
   constructor() {
     this._ws.onmessage = (messageEvent) => {
@@ -31,6 +31,13 @@ export class WSClient {
       const event = this._eventMapping.find((ev) => ev.event === message.type);
       if (event) event.handler(message.data);
     };
+
+    this._ws.onopen = () => {
+      this._scheduledEmits.forEach((data) =>
+        this._ws.send(JSON.stringify(data))
+      );
+      this._scheduledEmits = [];
+    };
   }
 
   on(event: IncomingMessageTypes, handler: WSEventHandler) {
@@ -41,6 +48,10 @@ export class WSClient {
   }
 
   emit(data: WSOutgoingMessage) {
+    if (this._ws.readyState !== WebSocket.OPEN) {
+      this._scheduledEmits.push(data);
+      return;
+    }
     this._ws.send(JSON.stringify(data));
   }
 

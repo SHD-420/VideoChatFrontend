@@ -1,14 +1,13 @@
 import { RootState } from "@/store/types";
 import { Module } from "vuex";
-
 import { mutations } from "./mutations";
-import { RoomState } from "./types";
+import { MediaState } from "./types";
 
-export const roomModule: Module<RoomState, RootState> = {
+export const mediaModule: Module<MediaState, RootState> = {
   namespaced: false,
   state: {
-    waitingMembers: [],
-    members: new Map(),
+    isAudioEnabled: false,
+    isVideoEnabled: false,
   },
   mutations,
 };

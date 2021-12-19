@@ -9,29 +9,22 @@
       <button type="submit" class="primary">Create a room</button>
     </form>
   </div>
-  <base-modal />
 </template>
 
 <script lang="ts">
-import { useStore } from "@/store";
-import { ModalMutationTypes } from "@/store/modules/modal/types";
 import { defineComponent, ref } from "vue";
 
 export default defineComponent({
   emits: ["create-room-request", "join-room-request"],
   setup(_, { emit }) {
-    const store = useStore();
     const roomIdInput = ref("");
 
     function createRoom() {
-      store.commit(ModalMutationTypes.SHOW_AUTH_MODAL, () =>
-        emit("create-room-request")
-      );
+      emit("create-room-request");
     }
+    
     function joinRoom() {
-      store.commit(ModalMutationTypes.SHOW_AUTH_MODAL, () =>
-        emit("join-room-request", roomIdInput.value)
-      );
+      emit("join-room-request", roomIdInput.value);
     }
 
     return {

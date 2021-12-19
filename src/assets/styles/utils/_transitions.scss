@@ -2,7 +2,7 @@
   .#{$transition-name}-enter-active,
   .#{$transition-name}-leave-active {
     transition-duration: $duration;
-    transition-timing-function: ease-out;
+    transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1)
   }
 
   .#{$transition-name}-enter-from,
@@ -11,11 +11,20 @@
   }
 }
 
-@include _simple-transition(fade){
+@include _simple-transition(fade) {
   opacity: 0;
 }
 
-@include _simple-transition(slide-y){
-  transform: translateY(100px);
+@include _simple-transition(slide-y) {
+  transform: translateY(200px);
   opacity: 0;
+}
+
+@include _simple-transition(scale-fade) {
+  transform: scale(1.5);
+  opacity: 0;
+}
+
+@include _simple-transition(slide-x, 0.4s) {
+  transform: translateX(-100%);
 }

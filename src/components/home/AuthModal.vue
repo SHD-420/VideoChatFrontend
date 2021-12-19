@@ -39,7 +39,7 @@ import { AuthMutationTypes, AvatarURLS } from "@/store/modules/auth/types";
 import { computed, defineComponent, ref } from "vue";
 
 export default defineComponent({
-  emits: ["update:should-show", "success"],
+  emits: ["closed"],
   setup() {
     const store = useStore();
     const currentName = ref(store.state.auth?.username);

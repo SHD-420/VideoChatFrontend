@@ -25,25 +25,18 @@
 </template>
 
 <script lang="ts">
-import { useWebSockets } from "@/plugins/WebSockets";
 import { defineComponent } from "@vue/runtime-core";
-import { useRouter } from "@/router";
-import { RouteNames } from "@/router/types";
 import HeroSectionForm from "./HeroSectionForm.vue";
 
 export default defineComponent({
   components: { HeroSectionForm },
-  setup() {
-    const ws = useWebSockets();
-    const router = useRouter();
-
+  emits: ["create-room-request", "join-room-request"],
+  setup(_, { emit }) {
     function createRoom() {
-      ws.createRoom().then(() => router.push({ name: RouteNames.Room }));
-      // .catch((error) => console.log("error"))
+      emit("create-room-request");
     }
     function joinRoom(roomId: string) {
-      console.log("please wait");
-      ws.joinRoom(roomId).then(() => router.push({ name: RouteNames.Room }));
+      emit("join-room-request", roomId);
     }
 
     return { createRoom, joinRoom };

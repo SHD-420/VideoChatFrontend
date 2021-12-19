@@ -6,6 +6,7 @@ import { RootState } from "./types";
 import { authModule } from "./modules/auth";
 import { modalModule } from "./modules/modal";
 import { roomModule } from "./modules/room";
+import { mediaModule } from "./modules/media";
 
 export const key: InjectionKey<Store<RootState>> = Symbol();
 
@@ -14,7 +15,12 @@ export function useStore(): TypedStore {
 }
 
 const store: Store<RootState> = createStore({
-  modules: { auth: authModule, modal: modalModule, room: roomModule },
+  modules: {
+    auth: authModule,
+    modal: modalModule,
+    room: roomModule,
+    media: mediaModule,
+  },
 });
 
 export default store;

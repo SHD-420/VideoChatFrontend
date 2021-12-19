@@ -1,0 +1,23 @@
+@use "../vars";
+
+.bg-pr {
+  background-color: vars.$primary;
+}
+.bg-sec {
+  background-color: vars.$secondary;
+}
+
+.bg-dark{
+  background-color: vars.$dark1;
+}
+
+.bg-fade-pr {
+  background-image: linear-gradient(vars.$primary, rgba(vars.$primary, 0.5));
+}
+.bg-fade-sec {
+  background-image: linear-gradient(
+    vars.$secondary,
+    rgba(vars.$secondary, 0.5)
+  );
+}
+

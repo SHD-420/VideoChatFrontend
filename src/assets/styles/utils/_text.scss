@@ -1,6 +1,6 @@
-@use '../vars';
+@use "../vars";
 
-p{
+p {
   line-height: 1.75;
 }
 
@@ -9,6 +9,9 @@ p{
 }
 .text-secondary {
   color: vars.$secondary;
+}
+.text-white {
+  color: vars.$light1;
 }
 
 .text-bold {
@@ -19,4 +22,8 @@ p{
 }
 .text-light {
   font-weight: 400;
+}
+
+.text-center{
+  text-align: center;
 }

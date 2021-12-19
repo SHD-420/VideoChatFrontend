@@ -27,12 +27,12 @@ export const mutations: RoomMutations & MutationTree<RoomState> = {
   [RoomMutationTypes.SET_ID](state, payload) {
     state.id = payload;
   },
-  [RoomMutationTypes.ADD_MEMBER](state, payload) {    
-    state.members?.set(payload.socketId,payload.member);
+  [RoomMutationTypes.ADD_MEMBER](state, payload) {
+    state.members?.set(payload.socketId, payload.member);
   },
   [RoomMutationTypes.REMOVE_MEMBER](state, payload) {
-    const member = state.members.get(payload)
-    if(member){
+    const member = state.members.get(payload);
+    if (member) {
       member.connection.close();
       state.members.delete(payload);
     }
@@ -40,7 +40,8 @@ export const mutations: RoomMutations & MutationTree<RoomState> = {
   },
 
   [RoomMutationTypes.ADD_WAITING_MEMBER](state, payload) {
-    state.waitingMembers?.push(payload);
+    if (!state.waitingMembers.some((m) => m.socketId === payload.socketId))
+      state.waitingMembers?.push(payload);
   },
   [RoomMutationTypes.REMOVE_WAITING_MEMBER](state, payload) {
     state.waitingMembers = state.waitingMembers?.filter(

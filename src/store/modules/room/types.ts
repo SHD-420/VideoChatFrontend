@@ -1,10 +1,12 @@
 import { AvatarURLS } from "@/store/modules/auth/types";
 import { WebSocketUser } from "@/plugins/WebSockets/types";
+import { RTCDCClient } from "@/plugins/RTC/RTCDCClient";
 
 export interface RoomMember {
   connection: RTCPeerConnection;
   identity: { username: string; avatar: AvatarURLS };
   stream: MediaStream;
+  dataChannel: RTCDCClient;
 }
 
 export interface RoomState {
