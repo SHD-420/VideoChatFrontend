@@ -43,7 +43,7 @@ export default defineComponent({
   setup() {
     const store = useStore();
     const currentName = ref(store.state.auth?.username);
-    const currentAvatar = computed(() => store.state.auth?.avatar);
+    const currentAvatar = computed(() => store.state.auth?.avatar as string);
     function setAvatar(newAvatar: AvatarURLS) {
       store.commit(AuthMutationTypes.SET_AVATAR, newAvatar);
     }

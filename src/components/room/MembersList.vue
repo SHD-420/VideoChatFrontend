@@ -16,6 +16,7 @@
 </template>
 
 <script lang="ts">
+import { UserIdentity } from "@/plugins/RTC/types";
 import { useStore } from "@/store";
 import { ModalMutationTypes } from "@/store/modules/modal/types";
 import { RoomMember } from "@/store/modules/room/types";
@@ -27,11 +28,11 @@ export default defineComponent({
     const store = useStore();
     const members = computed(() => store.state.room.members);
 
-    function removeMember(member: RoomMember) {
-      // store.commit(ModalMutationTypes.SHOW_REMOVE_MEMBER_CONFIRMATION, {
-      //   memberName: member.username,
-      //   onConfirmed: () => console.log(`${member.username} removed`),
-      // });
+    function removeMember(member: UserIdentity) {
+      store.commit(ModalMutationTypes.SHOW_REMOVE_MEMBER_CONFIRMATION, {
+        memberName: member.username,
+        onConfirmed: () => console.log(`${member.username} removed`),
+      });
     }
     return { members, removeMember };
   },

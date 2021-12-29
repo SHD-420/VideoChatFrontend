@@ -34,7 +34,7 @@ export default defineComponent({
       default: false,
     },
     activeMember: {
-      type: Object as PropType<MemberData>,
+      type: Object as PropType<MemberData | null>,
       default: null,
     },
   },

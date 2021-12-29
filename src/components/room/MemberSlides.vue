@@ -3,7 +3,7 @@
     <li
       class="member-slides__item"
       v-for="member in members"
-      :key="member"
+      :key="member.id"
       :class="{ 'member-slides__item--active': currentMember === member.id }"
     >
       <base-video
@@ -75,17 +75,17 @@ export default defineComponent({
 
   overflow-x: scroll;
   scrollbar-width: thin;
-  scrollbar-color: rgba($light1,0.5) transparent;
+  scrollbar-color: rgba($light1, 0.5) transparent;
 
   &::-webkit-scrollbar {
     background-color: transparent;
     height: 0.5rem;
   }
   &::-webkit-scrollbar-thumb {
-    background-color: rgba($light3,0.25);
+    background-color: rgba($light3, 0.25);
     border-radius: 2rem;
     &:hover {
-      background-color: rgba($light1,0.5);
+      background-color: rgba($light1, 0.5);
     }
   }
   &__item {

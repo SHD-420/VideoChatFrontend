@@ -52,7 +52,7 @@ import { RouteNames } from "@/router/types";
 export default defineComponent({
   props: {
     activeMember: {
-      type: Object as PropType<MemberData>,
+      type: Object as PropType<MemberData | null>,
       default: null,
     },
   },
@@ -83,7 +83,7 @@ export default defineComponent({
     }
 
     function pinSelfVideo() {
-      console.log("self pinned")
+      console.log("self pinned");
       emit("self-pinned");
     }
     function leaveRoom() {
