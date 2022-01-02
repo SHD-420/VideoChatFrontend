@@ -22,6 +22,8 @@ export type ModalMutations<S = ModalState> = {
   ): void;
   [ModalMutationTypes.SHOW_JOINING_MODAL](state: S): void;
   [ModalMutationTypes.SHOW_JOIN_ERROR_MODAL](state: S): void;
+  [ModalMutationTypes.SHOW_GOT_REMOVED_MODAL](state: S): void;
+  [ModalMutationTypes.SHOW_ROOM_CLOSED_MODAL](state: S): void;
 };
 
 export const mutations: MutationTree<ModalState> & ModalMutations = {
@@ -82,6 +84,26 @@ export const mutations: MutationTree<ModalState> & ModalMutations = {
       render(MessageModal, {
         message: "Sorry, that room doesn't exist.",
         type: "error",
+      })
+    );
+    state.shouldShow = true;
+    state.isClosable = true;
+  },
+  [ModalMutationTypes.SHOW_GOT_REMOVED_MODAL](state) {
+    state.component = markRaw(
+      render(MessageModal, {
+        message: "The owner has removed you.",
+        type: "error",
+      })
+    );
+    state.shouldShow = true;
+    state.isClosable = true;
+  },
+  [ModalMutationTypes.SHOW_ROOM_CLOSED_MODAL](state) {
+    state.component = markRaw(
+      render(MessageModal, {
+        message: "The room was closed.",
+        type: "info",
       })
     );
     state.shouldShow = true;

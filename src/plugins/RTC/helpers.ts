@@ -43,7 +43,6 @@ export function useRTCHelpers(
 
     connection.addEventListener("track", (event) => {
       const memberEntry = members.findByConn(event.target as RTCPeerConnection);
-
       if (memberEntry) {
         const [socketId, member] = memberEntry;
         const stream: MediaStream = member.stream || new MediaStream();

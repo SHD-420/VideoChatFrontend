@@ -1,7 +1,7 @@
 <template>
   <div class="msg-modal pt-lg">
-    <div v-if="type==='loading'" class="msg-modal__spinner"></div>
-    <div v-else-if="type==='error'" class="msg-modal__error">
+    <div v-if="type === 'loading'" class="msg-modal__spinner"></div>
+    <div v-else-if="type === 'error'" class="msg-modal__error">
       <font-awesome-icon icon="times"></font-awesome-icon>
     </div>
     <p class="text-center mt-lg text-medium px-xl py-sm">
@@ -20,9 +20,9 @@ export default defineComponent({
       default: null,
     },
     type: {
-      type: String as PropType<"loading"|"error">,
+      type: String as PropType<"loading" | "error" | "info">,
       required: true,
-    }
+    },
   },
 });
 </script>
@@ -30,7 +30,7 @@ export default defineComponent({
 <style  lang="scss" scoped>
 .msg-modal {
   background: $dark2;
-  p{
+  p {
     color: $light3;
     background-color: $dark1;
   }
@@ -42,7 +42,7 @@ export default defineComponent({
     border-radius: 50%;
     animation: spin 0.5s linear infinite;
   }
-  &__error{
+  &__error {
     // background: $error;
     // box-sizing: content-box;
     // color: $light1;

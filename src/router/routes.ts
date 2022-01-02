@@ -1,6 +1,7 @@
 import { RouteRecordRaw } from "vue-router";
 import { RouteNames } from "./types";
 import Home from "@/views/Home.vue";
+import Room from "@/views/Room.vue";
 
 export const routes: Array<RouteRecordRaw> = [
   {
@@ -10,7 +11,11 @@ export const routes: Array<RouteRecordRaw> = [
   },
   {
     path: "/room",
-    component: () => import("@/views/Room.vue"),
+    component: Room,
     name: RouteNames.Room,
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    component: () => import("@/views/404.vue"),
   },
 ];

@@ -3,6 +3,7 @@
     <video
       class="base-video__stream"
       :srcObject.prop.camel="stream"
+      :muted="isMuted"
       autoplay
     ></video>
     <h5 class="base-video__user-name text-medium p-xs" v-if="!isSizeSmall">
@@ -38,14 +39,18 @@ export default defineComponent({
       type: Boolean,
       required: true,
     },
+    isMuted: {
+      type: Boolean,
+      default: false,
+    },
     isSizeSmall: {
       type: Boolean,
       default: false,
     },
-    muted:{
+    muted: {
       type: Boolean,
       default: false,
-    }
+    },
   },
 });
 </script>

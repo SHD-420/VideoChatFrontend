@@ -11,6 +11,7 @@
           <base-video
             :isVideoEnabled="activeMemberData.isVideoEnabled"
             :user="activeMemberData.identity"
+            :isMuted="true"
             :stream="activeMemberData.stream"
           ></base-video>
         </div>

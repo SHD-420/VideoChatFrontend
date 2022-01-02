@@ -3,7 +3,12 @@ import { MutationTree } from "vuex";
 import { RoomMember, RoomMutationTypes, RoomState } from "./types";
 
 export type RoomMutations<S = RoomState> = {
-  [RoomMutationTypes.SET_ID]: (state: S, payload: string) => void;
+  [RoomMutationTypes.SETUP_ROOM]: (
+    state: S,
+    payload: { id: string; isMeOwner: boolean }
+  ) => void;
+
+  [RoomMutationTypes.RESET_ROOM]: (state: S) => void;
 
   [RoomMutationTypes.ADD_WAITING_MEMBER]: (
     state: S,
@@ -24,10 +29,21 @@ export type RoomMutations<S = RoomState> = {
 };
 
 export const mutations: RoomMutations & MutationTree<RoomState> = {
-  [RoomMutationTypes.SET_ID](state, payload) {
-    state.id = payload;
+  [RoomMutationTypes.SETUP_ROOM](state, payload) {
+    state.isMeOwner = payload.isMeOwner;
+    state.id = payload.id;
+  },
+  [RoomMutationTypes.RESET_ROOM](state) {
+    delete state.id;
+    delete state.isMeOwner;
+    state.waitingMembers = [];
+    for (let member of state.members.values()) member.connection.close();
+    state.members = new Map();
   },
   [RoomMutationTypes.ADD_MEMBER](state, payload) {
+    payload.member.connection.addEventListener("negotiationneeded",(ev)=>{
+      console.log(ev);
+    })
     state.members?.set(payload.socketId, payload.member);
   },
   [RoomMutationTypes.REMOVE_MEMBER](state, payload) {

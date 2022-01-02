@@ -11,12 +11,14 @@ export interface RoomMember {
 
 export interface RoomState {
   id?: string;
+  isMeOwner?: boolean;
   members: Map<string, RoomMember>;
   waitingMembers: Array<WebSocketUser>;
 }
 
 export enum RoomMutationTypes {
-  SET_ID = "SET_ROOM_ID",
+  SETUP_ROOM = "SETUP_ROOM",
+  RESET_ROOM = "RESET_ROOM",
   ADD_MEMBER = "ADD_ROOM_MEMBER",
   REMOVE_MEMBER = "REMOVE_ROOM_MEMBER",
   ADD_WAITING_MEMBER = "ADD_ROOM_WAITING_MEMBER",

@@ -89,11 +89,4 @@ export function setupRTC(wsclient: WSClient, store: TypedStore) {
       if (conn) await conn.addIceCandidate(data.candidate);
     }
   );
-
-  wsclient.on(IncomingMessageTypes.ROOM_MEMBER_LEFT, (socketId: string) => {
-    store.commit(RoomMutationTypes.REMOVE_MEMBER, socketId);
-  });
-  wsclient.on(IncomingMessageTypes.ROOM_DESTROYED, () => {
-    console.log("Room destroyed...bakayaro!!");
-  });
 }

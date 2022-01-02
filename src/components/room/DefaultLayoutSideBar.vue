@@ -22,7 +22,7 @@
               <span class="text-light mr-sm"> Room ID: </span>
               <span> {{ roomId }} </span>
             </h4>
-            <p class="mt-sm">12 members</p>
+            <p class="mt-sm">{{ membersCount }} members</p>
           </div>
           <button class="error large sharp" @click="leaveRoom">
             <font-awesome-icon icon="sign-out-alt"></font-awesome-icon>
@@ -34,7 +34,7 @@
             <font-awesome-icon icon="clipboard"></font-awesome-icon>
           </button>
         </p>
-        <waiting-members-list></waiting-members-list>
+        <waiting-members-list v-if="isMeOwner"></waiting-members-list>
         <members-list></members-list>
       </div>
     </transition>
@@ -44,7 +44,6 @@
 <script lang="ts">
 import { useStore } from "@/store";
 import { computed, defineComponent, ref, watch } from "vue";
-import { mapState } from "vuex";
 import MembersList from "./MembersList.vue";
 import WaitingMembersList from "./WaitingMembersList.vue";
 
@@ -66,15 +65,15 @@ export default defineComponent({
       shouldShowBadge.value = false;
     }
     return {
-      shouldShowBadge,
-      showSideBar,
-      shouldShowSidebar,
       joinLink,
-      leaveRoom: () => emit("leave-room-requested"),
+      shouldShowBadge,
+      shouldShowSidebar,
       roomId,
-      copyJoinLink: () => {
-        navigator.clipboard.writeText(joinLink);
-      },
+      membersCount: computed(() => store.state.room.members.size),
+      isMeOwner: computed(() => store.state.room.isMeOwner),
+      showSideBar,
+      leaveRoom: () => emit("leave-room-requested"),
+      copyJoinLink: () => navigator.clipboard.writeText(joinLink),
     };
   },
 });

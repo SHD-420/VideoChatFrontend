@@ -1,6 +1,6 @@
 <template>
   <div class="joining-modal">
-    <video autoplay :srcObject.prop.camel="mediaState.stream"></video>
+    <video autoplay :srcObject.prop.camel="mediaState.stream" muted></video>
     <div class="joining-modal__control-btns my-lg">
       <button class="primary icon" @click="TOGGLE_VIDEO()">
         <font-awesome-icon
@@ -26,7 +26,10 @@
 <script lang="ts">
 import { computed, defineComponent } from "vue";
 import { useStore } from "@/store";
-import { MediaMutationTypes } from "@/store/modules/media/types";
+import {
+  MediaActionTypes,
+  MediaMutationTypes,
+} from "@/store/modules/media/types";
 import { mapMutations } from "vuex";
 import { ModalMutationTypes } from "@/store/modules/modal/types";
 
@@ -43,10 +46,8 @@ export default defineComponent({
       if (mediaState.value.stream && onSuccess) onSuccess();
     }
 
-    navigator.mediaDevices
-      .getUserMedia({ video: true, audio: true })
-      .then((stream) => store.commit(MediaMutationTypes.SET_STREAM, stream));
-
+    store.dispatch(MediaActionTypes.INITIALIZE_MEDIA);
+    
     return {
       mediaState,
       handleContinue,

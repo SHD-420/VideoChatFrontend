@@ -1,14 +1,18 @@
 <template>
   <ul class="members-list text-white">
     <li
-      v-for="(member, i) in members.values()"
-      :key="i"
+      v-for="[id, member] in members.entries()"
+      :key="id"
       class="member d-flex p-md"
     >
       <img :src="member.identity.avatar" class="member__avatar mr-md" />
       <p>{{ member.identity.username }}</p>
       <div class="flex-grow"></div>
-      <button class="icon small" @click="removeMember(member.identity)">
+      <button
+        v-if="isMeOwner"
+        class="icon small"
+        @click="removeMember(member.identity.username, id)"
+      >
         <font-awesome-icon icon="minus-circle"></font-awesome-icon>
       </button>
     </li>
@@ -16,25 +20,26 @@
 </template>
 
 <script lang="ts">
-import { UserIdentity } from "@/plugins/RTC/types";
+import { useWebSockets } from "@/plugins/WebSockets";
 import { useStore } from "@/store";
 import { ModalMutationTypes } from "@/store/modules/modal/types";
-import { RoomMember } from "@/store/modules/room/types";
 import { computed, defineComponent } from "vue";
 
 export default defineComponent({
   emits: ["new-waiting-member"],
   setup() {
     const store = useStore();
+    const ws = useWebSockets();
     const members = computed(() => store.state.room.members);
+    const isMeOwner = computed(() => store.state.room.isMeOwner);
 
-    function removeMember(member: UserIdentity) {
+    function removeMember(memberName: string, memberId: string) {
       store.commit(ModalMutationTypes.SHOW_REMOVE_MEMBER_CONFIRMATION, {
-        memberName: member.username,
-        onConfirmed: () => console.log(`${member.username} removed`),
+        memberName,
+        onConfirmed: () => ws.removeMember(memberId),
       });
     }
-    return { members, removeMember };
+    return { members, isMeOwner, removeMember };
   },
 });
 </script>
