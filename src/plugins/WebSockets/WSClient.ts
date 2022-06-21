@@ -40,6 +40,9 @@ export class WSClient {
         this._ws.send(JSON.stringify(data))
       );
       this._scheduledEmits = [];
+
+      // To keep the connection alive, keep sending ping frames
+      window.setInterval(() => this._ws.send("{PING}"), 55_000);
     };
   }
 
