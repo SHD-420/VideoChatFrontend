@@ -1,20 +1,20 @@
 <template>
   <div v-if="roomId">
     <expanded-layout
-      :activeMember="activeMember"
+      :activeMemberId="activeMemberId"
       :shouldShow="shouldShowExpanded"
       @layout-change-requested="shouldShowExpanded = false"
     ></expanded-layout>
 
     <default-layout
-      :activeMember="activeMember"
-      @self-pinned="pinMember(null)"
+      :activeMemberId="activeMemberId"
+      @self-pinned="pinMember('')"
       @layout-change-requested="shouldShowExpanded = true"
     ></default-layout>
 
     <member-slides
       @member-pinned="pinMember"
-      @self-pinned="pinMember(null)"
+      @self-pinned="pinMember('')"
     ></member-slides>
   </div>
 </template>
@@ -26,7 +26,6 @@ import MemberSlides from "@/components/room/MemberSlides.vue";
 import { useWebSockets } from "@/plugins/WebSockets";
 import { useStore } from "@/store";
 import { ModalMutationTypes } from "@/store/modules/modal/types";
-import { MemberData } from "@/types/roomTypes";
 import { computed, defineComponent, ref } from "vue";
 import { onBeforeRouteLeave } from "vue-router";
 import { useRouter } from "@/router";
@@ -40,12 +39,9 @@ export default defineComponent({
     const ws = useWebSockets();
     const roomId = computed(() => store.state.room.id);
     const shouldShowExpanded = ref(false);
-    const activeMember = ref<MemberData | null>(null);
-    function pinMember(newMember: MemberData | null) {
-      activeMember.value = newMember;
-    }
+    const activeMemberId = ref<string>("");
 
-    
+    const pinMember = (newId: string) => (activeMemberId.value = newId);
 
     if (!roomId.value) router.push({ name: RouteNames.Home });
 
@@ -62,7 +58,7 @@ export default defineComponent({
 
     return {
       roomId,
-      activeMember,
+      activeMemberId,
       pinMember,
       shouldShowExpanded,
     };

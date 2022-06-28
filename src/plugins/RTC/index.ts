@@ -1,92 +1,98 @@
-import { RoomMutationTypes } from "@/store/modules/room/types";
-import { TypedStore } from "@/store/types";
-import { RTCDCClient } from "../RTC/RTCDCClient";
 import { WSClient } from "@/plugins/WebSockets/WSClient";
+import { IncomingMessageTypes } from "@/plugins/WebSockets/types";
+import { SignalingChannel } from "./SignalingChannel";
+import { PrematureMember } from "./PrematureMember";
+import { RoomMember, RoomMutationTypes } from "@/store/modules/room/types";
+import { MediaState, UserIdentity } from "./types";
+import { TypedStore } from "@/store/types";
 
-import {
-  IncomingRTCAnswer,
-  IncomingRTCIceCandidate,
-  IncomingRTCOffer,
-} from "./types";
-
-import {
-  IncomingMessageTypes,
-  OutgoingMessageTypes,
-} from "@/plugins/WebSockets/types";
-import { PendingMembers } from "./PendingMembers";
-import { useRTCHelpers } from "./helpers";
-import { computed } from "vue";
-
-/*
-  --Purpose of "members" object--
-
-  It stores necessary details about room members like RTCPeerConnection, their MediaStream,
-  etc before they're written into store's members map.
-  This is done to avoid bugs that arise due to wrong timing/overlapping of RTC events.
- */
-const members = new PendingMembers();
+const peers = new Map<string, PrematureMember>();
 
 export function setupRTC(wsclient: WSClient, store: TypedStore) {
-  const myIdentity = computed(() => ({
-    ...store.state.auth,
-  }));
+  const signaler = new SignalingChannel(wsclient);
 
-  members.onMemberReady((data) => {
-    store.commit(RoomMutationTypes.ADD_MEMBER, data);
+  const getPremetureConfig = (id: string) => ({
+    id,
+    signaler,
+    myIdentity: store.state.auth as UserIdentity,
+    // We are sure to have "myStream" as truthy
+    myStream: store.state.media.stream!,
+    myMediaState: {
+      audio: (store.state.media.isAudioEnabled ? "on" : "off") as MediaState,
+      video: (store.state.media.isVideoEnabled ? "on" : "off") as MediaState,
+    },
+    onMatured: (member: RoomMember) => {
+      store.commit(RoomMutationTypes.ADD_MEMBER, { socketId: id, member });
+      // Subscribe to audio and video state changes
+      member.dataChannel.onAudioStateChange(({ newState }) =>
+        store.commit(RoomMutationTypes.SET_IS_AUDIO_ON, {
+          socketId: id,
+          newVal: newState === "on",
+        })
+      );
+      member.dataChannel.onVideoStateChange(({ newState }) =>
+        store.commit(RoomMutationTypes.SET_IS_VIDEO_ON, {
+          socketId: id,
+          newVal: newState === "on",
+        })
+      );
+
+      peers.delete(id);
+    },
   });
-  const helpers = useRTCHelpers(store, wsclient, members);
 
-  wsclient.on(
-    IncomingMessageTypes.NEW_ROOM_MEMBER,
-    async (memberSocketId: string) => {
-      const conn = helpers.createPeerConn();
-      const dataChannel = RTCDCClient.fromConnection(conn);
-      dataChannel.onOpen(() => helpers.setInitialStreamState(dataChannel));
-      members.set(memberSocketId, { connection: conn, dataChannel });
-      const offer = await conn.createOffer();
-      await conn.setLocalDescription(offer);
-      wsclient.emit({
-        type: OutgoingMessageTypes.RTC_OFFER,
-        data: { offer, identity: myIdentity.value, target: memberSocketId },
-      });
-    }
-  );
+  wsclient.on(IncomingMessageTypes.NEW_ROOM_MEMBER, (memberId: string) => {
+    // Send call
+    peers.set(
+      memberId,
+      new PrematureMember({
+        ...getPremetureConfig(memberId),
+        isSender: true,
+      })
+    );
+  });
 
-  wsclient.on(
-    IncomingMessageTypes.RTC_OFFER,
-    async (data: IncomingRTCOffer) => {
-      const conn = helpers.createPeerConn();
-      members.set(data.source, {
-        connection: conn,
-        identity: data.sourceUser,
-      });
-      await conn.setRemoteDescription(new RTCSessionDescription(data.offer));
-      const answer = await conn.createAnswer();
-      await conn.setLocalDescription(answer);
+  signaler.onmessage = async ({ description, candidate, source }) => {
+    try {
+      let shouldIgnoreOffer = false;
 
-      wsclient.emit({
-        type: OutgoingMessageTypes.RTC_ANSWER,
-        data: { answer, identity: myIdentity.value, target: data.source },
-      });
-    }
-  );
+      let peer = peers.get(source);
 
-  wsclient.on(
-    IncomingMessageTypes.RTC_ANSWER,
-    async (data: IncomingRTCAnswer) => {
-      const conn = members.get(data.source)?.connection;
-      if (conn) {
-        await conn.setRemoteDescription(new RTCSessionDescription(data.answer));
-        members.set(data.source, { identity: data.sourceUser });
+      if (!peer) {
+        // Receive call
+        peer = new PrematureMember({
+          ...getPremetureConfig(source),
+          isSender: false,
+        });
+        peers.set(source, peer);
       }
-    }
-  );
 
-  wsclient.on(
-    IncomingMessageTypes.RTC_ICE_CANDIDATE,
-    async (data: IncomingRTCIceCandidate) => {
-      const conn = members.get(data.source)?.connection;
-      if (conn) await conn.addIceCandidate(data.candidate);
+      if (description) {
+        const isOffer = description.type === "offer";
+        const hasOfferCollision =
+          isOffer &&
+          (peer.isMakingOffer || peer.connection.signalingState !== "stable");
+        shouldIgnoreOffer = !peer.isPolite && hasOfferCollision;
+
+        if (shouldIgnoreOffer) return;
+
+        await peer.connection.setRemoteDescription(description);
+        if (isOffer) {
+          await peer.connection.setLocalDescription();
+          signaler.emit({
+            target: source,
+            description: peer.connection.localDescription,
+          });
+        }
+      } else if (candidate) {
+        try {
+          await peer.connection.addIceCandidate(candidate);
+        } catch (err) {
+          if (!shouldIgnoreOffer) throw err;
+        }
+      }
+    } catch (err) {
+      console.log(err);
     }
-  );
+  };
 }

@@ -3,7 +3,7 @@ import { RouteNames } from "@/router/types";
 import { useStore } from "@/store";
 import { ModalMutationTypes } from "@/store/modules/modal/types";
 import { RoomMutationTypes } from "@/store/modules/room/types";
-import { setupRTC } from "../RTC";
+import { setupRTC } from "@/plugins/RTC";
 import { useRoomHelpers } from "./helpers";
 import { IncomingMessageTypes, WebSocketUser } from "./types";
 import { WSClient } from "./WSClient";

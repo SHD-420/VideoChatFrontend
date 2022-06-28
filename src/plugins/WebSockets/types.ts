@@ -12,9 +12,7 @@ export enum IncomingMessageTypes {
   NEW_ROOM_MEMBER = "NEW_MEMBER",
   ROOM_MEMBER_LEFT = "MEMBER_LEFT",
   ROOM_DESTROYED = "DESTROYED_ROOM",
-  RTC_OFFER = "RTC_OFFER",
-  RTC_ANSWER = "RTC_ANSWER",
-  RTC_ICE_CANDIDATE = "RTC_ICE_CANDIDATE",
+  RTC_EVENT = "0",
 }
 
 export enum OutgoingMessageTypes {
@@ -23,9 +21,7 @@ export enum OutgoingMessageTypes {
   REMOVE_MEMBER = "REMOVE_MEMBER",
   ACCEPT_JOIN_ROOM_REQ = "ACCEPT_JOIN_ROOM_REQ",
   ME_DISCONNECTED = "USER_DISCONNECTED",
-  RTC_OFFER = "RTC_OFFER",
-  RTC_ANSWER = "RTC_ANSWER",
-  RTC_ICE_CANDIDATE = "RTC_ICE_CANDIDATE",
+  RTC_EVENT = "0",
 }
 
 export interface WebSocketUser extends UserIdentity {
