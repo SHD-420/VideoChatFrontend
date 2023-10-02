@@ -1,11 +1,6 @@
 @forward "buttons";
 @forward "inputs";
-@forward "text";
-@forward "responsive";
 @forward "transitions";
-@forward "spacing";
-@forward 'background';
-@forward 'shadows';
 
 @use "../vars";
 
@@ -17,7 +12,17 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  color: vars.$light1;
 }
+
+html {
+  background-color: vars.$dark2;
+}
+
+body {
+  margin: 0;
+}
+
 video {
   display: block;
   max-width: 100%;
@@ -34,10 +39,6 @@ ul {
   list-style-type: none;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
-#modals{
+#modals {
   z-index: 1000;
 }

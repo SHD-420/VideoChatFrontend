@@ -20,6 +20,15 @@ export type RoomMutations<S = RoomState> = {
     payload: { socketId: string; member: RoomMember }
   ) => void;
 
+  [RoomMutationTypes.SET_IS_AUDIO_ON]: (
+    state: S,
+    payload: { socketId: string; newVal: boolean }
+  ) => void;
+  [RoomMutationTypes.SET_IS_VIDEO_ON]: (
+    state: S,
+    payload: { socketId: string; newVal: boolean }
+  ) => void;
+
   [RoomMutationTypes.REMOVE_MEMBER]: (state: S, payload: string) => void;
 
   [RoomMutationTypes.REMOVE_WAITING_MEMBER]: (
@@ -41,10 +50,15 @@ export const mutations: RoomMutations & MutationTree<RoomState> = {
     state.members = new Map();
   },
   [RoomMutationTypes.ADD_MEMBER](state, payload) {
-    payload.member.connection.addEventListener("negotiationneeded",(ev)=>{
-      console.log(ev);
-    })
     state.members?.set(payload.socketId, payload.member);
+  },
+  [RoomMutationTypes.SET_IS_AUDIO_ON](state, payload) {
+    const member = state.members?.get(payload.socketId);
+    if (member) member.isAudioEnabled = payload.newVal;
+  },
+  [RoomMutationTypes.SET_IS_VIDEO_ON](state, payload) {
+    const member = state.members?.get(payload.socketId);
+    if (member) member.isVideoEnabled = payload.newVal;
   },
   [RoomMutationTypes.REMOVE_MEMBER](state, payload) {
     const member = state.members.get(payload);

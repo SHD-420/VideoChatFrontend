@@ -2,7 +2,7 @@
   <ul class="member-slides py-xl">
     <li
       class="member-slides__item"
-      v-for="member in members"
+      v-for="member in storeMembers"
       :key="member.id"
       :class="{ 'member-slides__item--active': currentMemberId === member.id }"
     >
@@ -12,7 +12,7 @@
         :isVideoEnabled="member.isVideoEnabled"
         :isSizeSmall="true"
       ></base-video>
-      <button class="primary icon my-sm small" @click="pinMember(member)">
+      <button class="primary icon my-sm small" @click="pinMember(member.id)">
         <font-awesome-icon icon="arrow-up"></font-awesome-icon>
       </button>
     </li>
@@ -21,57 +21,25 @@
 
 <script lang="ts">
 import { useStore } from "@/store";
-import { computed, defineComponent, ref, watch } from "vue";
+import { computed, defineComponent, ref } from "vue";
 import BaseVideo from "./BaseVideo.vue";
-import { MemberData } from "@/types/roomTypes";
-import { RoomMember } from "@/store/modules/room/types";
 
 export default defineComponent({
   components: { BaseVideo },
   emits: ["member-pinned", "self-pinned"],
   setup(_, { emit }) {
     const store = useStore();
-    const storeMembers = computed(() => store.state.room.members);
-    const members = ref<Array<MemberData>>([]);
+    const storeMembers = computed(() =>
+      [...store.state.room.members].map(([id, member]) => ({ id, ...member }))
+    );
     const currentMemberId = ref<string>("");
 
-    function pinMember(newMember: MemberData) {
-      currentMemberId.value = newMember.id;
-      emit("member-pinned", newMember);
+    function pinMember(newMemberId: string) {
+      currentMemberId.value = newMemberId;
+      emit("member-pinned", newMemberId);
     }
 
-    function updateMembers(newMembers: Array<[string, RoomMember]>) {
-      const oldMembers = [...members.value];
-      members.value = [];
-      let didCurrentMemberLeave = true;
-      for (const [socketId, roomMember] of newMembers) {
-        let member = oldMembers.find((m) => m.id === socketId);
-        if (!member) {
-          member = {
-            id: socketId,
-            identity: roomMember.identity,
-            stream: roomMember.stream,
-            isVideoEnabled: false,
-          };
-          roomMember.dataChannel.on("videostatechange", (data) => {
-            const target = members.value.find((m) => m.id === socketId);
-            if (target) target.isVideoEnabled = data.newState === "on";
-          });
-        }
-        if (member.id === currentMemberId.value) didCurrentMemberLeave = false;
-        members.value.push(member);
-      }
-      if (didCurrentMemberLeave) {
-        currentMemberId.value = "";
-        emit("self-pinned");
-      }
-    }
-
-    watch(() => [...storeMembers.value], updateMembers);
-
-    updateMembers([...storeMembers.value]);
-
-    return { members, pinMember, currentMemberId };
+    return { pinMember, currentMemberId, storeMembers };
   },
 });
 </script>

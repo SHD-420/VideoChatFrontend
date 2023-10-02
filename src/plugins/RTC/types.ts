@@ -5,19 +5,14 @@ export interface UserIdentity {
   avatar: AvatarURLS;
 }
 
-export interface IncomingRTCOffer {
-  offer: RTCSessionDescriptionInit;
-  source: string;
-  sourceUser: UserIdentity
-}
+export type MediaState = "on" | "off";
 
-export interface IncomingRTCAnswer {
-  answer: RTCSessionDescriptionInit;
+export type IncomingRTCEventArg = {
   source: string;
-  sourceUser: UserIdentity;
-}
+  description?: RTCSessionDescription | null;
+  candidate?: RTCIceCandidate | null;
+};
 
-export interface IncomingRTCIceCandidate {
-  candidate: RTCIceCandidate;
-  source: string;
-}
+export type OutgoingRTCEventArg = Omit<IncomingRTCEventArg, "source"> & {
+  target: string;
+};

@@ -1,6 +1,8 @@
 <template>
-  <router-view></router-view>
-  <base-modal />
+  <div id="app">
+    <router-view></router-view>
+    <base-modal />
+  </div>
 </template>
 
 <script lang="ts">
@@ -12,4 +14,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+#app {
+  display: block;
+}
 </style>

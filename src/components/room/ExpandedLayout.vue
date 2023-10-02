@@ -7,7 +7,7 @@
             <font-awesome-icon icon="times"></font-awesome-icon>
           </button>
         </div>
-        <div class="expanded-layout__content">
+        <div class="expanded-layout__content" v-if="activeMemberData">
           <base-video
             :isVideoEnabled="activeMemberData.isVideoEnabled"
             :user="activeMemberData.identity"
@@ -21,8 +21,7 @@
 </template>
 
 <script lang="ts">
-import { MemberData } from "@/types/roomTypes";
-import { computed, defineComponent, PropType, ref } from "vue";
+import { computed, defineComponent } from "vue";
 import { useStore } from "@/store";
 import { UserIdentity } from "@/plugins/RTC/types";
 import BaseVideo from "./BaseVideo.vue";
@@ -34,9 +33,9 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
-    activeMember: {
-      type: Object as PropType<MemberData | null>,
-      default: null,
+    activeMemberId: {
+      type: String,
+      default: "",
     },
   },
   emits: ["layout-change-requested"],
@@ -48,7 +47,7 @@ export default defineComponent({
     }
     const activeMemberData = computed(
       () =>
-        props.activeMember || {
+        store.state.room.members.get(props.activeMemberId) || {
           isVideoEnabled: mediaState.value.isVideoEnabled,
           stream: mediaState.value.stream as MediaStream,
           identity: store.state.auth as UserIdentity,

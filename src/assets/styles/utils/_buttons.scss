@@ -5,35 +5,13 @@ $_hover_darken_amoount: 20%;
 button,
 .btn {
   border: none;
-  padding: 0.75rem 1rem;
+  padding: 0.5rem 1rem;
   border-radius: 0.5rem;
   cursor: pointer;
   font-weight: 500;
   transition: 0.2s;
   background-color: transparent;
-
-  &.large {
-    font-size: 1.25rem;
-    padding: 1rem 1.5rem;
-  }
-
-  &.sharp {
-    border-radius: 0;
-  }
-
-  &.icon {
-    box-sizing: content-box;
-    padding: 1.25rem;
-    width: 1.5rem;
-    font-size: 1.25rem;
-    text-align: center;
-    border-radius: 50%;
-    &.small {
-      width: 1rem;
-      padding: 1rem;
-      font-size: 1rem;
-    }
-  }
+  color: vars.$light1;
 
   &:disabled,
   &.disabled {
@@ -46,8 +24,13 @@ button,
   }
 
   &.primary {
-    background-color: vars.$primary;
     color: vars.$light1;
+
+    background-image: linear-gradient(
+      to right,
+      vars.$primary,
+      rgba(vars.$secondary, 0.5)
+    );
 
     &:focus {
       box-shadow: 0 0 0 0.2rem rgba(vars.$primary, 0.5);
@@ -55,40 +38,6 @@ button,
 
     &:hover {
       background-color: darken(vars.$primary, $_hover_darken_amoount);
-    }
-  }
-  &.secondary {
-    background-color: vars.$secondary;
-    color: vars.$light1;
-
-    &:focus {
-      box-shadow: 0 0 0 0.2rem rgba(vars.$secondary, 0.5);
-    }
-
-    &:hover {
-      background-color: darken(vars.$secondary, $_hover_darken_amoount);
-    }
-  }
-  &.error {
-    background-color: vars.$error;
-    color: vars.$light1;
-
-    &:focus {
-      box-shadow: 0 0 0 0.2rem rgba(vars.$error, 0.5);
-    }
-
-    &:hover {
-      background-color: darken(vars.$error, $_hover_darken_amoount);
-    }
-  }
-
-  &.primary-outlined {
-    border: 2px solid vars.$primary;
-    color: vars.$primary;
-
-    &:hover {
-      border-color: transparent;
-      @extend .primary;
     }
   }
 }

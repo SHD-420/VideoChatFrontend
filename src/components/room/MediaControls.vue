@@ -40,14 +40,14 @@ export default defineComponent({
       store.commit(MediaMutationTypes.TOGGLE_VIDEO);
       const newState = mediaState.value.isVideoEnabled ? "on" : "off";
       store.state.room.members.forEach((member) =>
-        member.dataChannel.emit("videostatechange", { newState })
+        member.dataChannel.emitVideoStateChange({ newState })
       );
     }
     function toggleAudio() {
       store.commit(MediaMutationTypes.TOGGLE_AUDIO);
       const newState = mediaState.value.isAudioEnabled ? "on" : "off";
       store.state.room.members.forEach((member) =>
-        member.dataChannel.emit("audiostatechange", { newState })
+        member.dataChannel.emitAudioStateChange({ newState })
       );
     }
 

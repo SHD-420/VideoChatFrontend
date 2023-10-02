@@ -29,16 +29,15 @@ import BaseVideo from "@/components/room/BaseVideo.vue";
 import { UserIdentity } from "@/plugins/RTC/types";
 import { RouteNames } from "@/router/types";
 import { useStore } from "@/store";
-import { MemberData } from "@/types/roomTypes";
-import { computed, defineComponent, PropType } from "vue";
+import { computed, defineComponent } from "vue";
 import { useRouter } from "vue-router";
 import DefaultLayoutSideBar from "./DefaultLayoutSideBar.vue";
 import MediaControls from "./MediaControls.vue";
 
 export default defineComponent({
   props: {
-    activeMember: {
-      type: Object as PropType<MemberData | null>,
+    activeMemberId: {
+      type: String,
       default: null,
     },
   },
@@ -62,7 +61,9 @@ export default defineComponent({
     }));
 
     const activeMemberData = computed(
-      () => props.activeMember || selfMemberData.value
+      () =>
+        store.state.room.members.get(props.activeMemberId) ||
+        selfMemberData.value
     );
 
     return {
@@ -82,7 +83,7 @@ export default defineComponent({
     @include overlap-children;
   }
   &__my-video {
-    @extend .m-sm;
+    // @extend .m-sm;
     width: 8rem;
     height: 10rem;
     border-radius: 0.25rem;
