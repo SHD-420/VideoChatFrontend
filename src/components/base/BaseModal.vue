@@ -1,16 +1,13 @@
 <template>
   <teleport to="#modals">
     <transition name="fade" @afterEnter="shouldShowContent = true">
-      <div
-        class="base-modal px-sm"
-        v-if="shouldShowModal"
-        :style="{ height: `${documentHeight()}px` }"
-      >
+      <div class="base-modal" v-if="shouldShowModal">
+        <div class="base-modal__backdrop"></div>
         <transition name="slide-y">
           <div class="base-modal__content" v-show="shouldShowContent">
             <div class="base-modal__head" v-if="isClosable">
-              <button @click="closeModal" class="link">
-                <font-awesome-icon icon="times"></font-awesome-icon>
+              <button @click="closeModal">
+                <base-icon :icon="mdiClose" size="md" />
               </button>
             </div>
             <div class="base-modal__body">
@@ -26,62 +23,53 @@
   </teleport>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, ref } from "vue";
+<script setup lang="ts">
+import { computed, ref } from "vue";
 import { useStore } from "@/store";
 import { ModalMutationTypes } from "@/store/modules/modal/types";
+import { mdiClose } from "@mdi/js";
+import BaseIcon from "./BaseIcon.vue";
 
-export default defineComponent({
-  setup() {
-    const store = useStore();
+const store = useStore();
 
-    const shouldShowModal = computed(() => store.state.modal?.shouldShow);
-    const cuurrentModalComponent = computed(() => store.state.modal?.component);
-    const shouldShowContent = ref(false);
+const isClosable = computed(() => store.state.modal.isClosable);
+const shouldShowModal = computed(() => store.state.modal?.shouldShow);
+const cuurrentModalComponent = computed(() => store.state.modal?.component);
 
-    function closeModal() {
-      shouldShowContent.value = false;
-      store.commit(ModalMutationTypes.HIDE_MODAL);
-    }
+const shouldShowContent = ref(false);
 
-    return {
-      closeModal,
-      shouldShowModal,
-      cuurrentModalComponent,
-      shouldShowContent,
-      isClosable: computed(() => store.state.modal.isClosable),
-      documentHeight: () => document.documentElement.offsetHeight,
-    };
-  },
-});
+function closeModal() {
+  shouldShowContent.value = false;
+  store.commit(ModalMutationTypes.HIDE_MODAL);
+}
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .base-modal {
-  $self: &;
-  z-index: 4;
-  background: rgba($light1, 0.75);
-  position: absolute;
   width: 100%;
-  display: grid;
-  justify-content: center;
-  align-items: start;
-  &__content {
-    $roundness: 0.5rem;
-    min-width: 40vw;
-    border-radius: $roundness;
-    background-color: $light1;
-    border: 2px solid $primary;
-    margin-top: 2rem;
+  position: fixed;
+  min-height: 100vh;
 
-    #{$self}__head {
-      display: flex;
-      justify-content: flex-end;
-      border-bottom: 1px solid $light3;
-      button {
-        font-size: 1.5rem;
-        color: rgba($primary, 0.5);
-      }
+  @include overlap-children;
+  &__backdrop {
+    height: 100%;
+    background: rgba(map-get($gray, 800), 0.25);
+  }
+  &__content {
+    height: max-content;
+    margin: 2rem auto;
+    width: max-content;
+    border-radius: 0.25rem;
+    background-color: map-get($gray, 100);
+    box-shadow: 0 4px 16px rgba(map-get($gray, 800), 0.1);
+  }
+  &__head {
+    display: flex;
+    justify-content: flex-end;
+    button {
+      padding: 1rem;
+      font-size: 1.5rem;
+      color: map-get($gray, 400);
     }
   }
 }

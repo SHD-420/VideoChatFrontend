@@ -1,8 +1,9 @@
 export enum AvatarURLS {
-  DEFAULT = "https://wallpapercave.com/wp/wc1709187.jpg",
-  A1 = "https://c4.wallpaperflare.com/wallpaper/501/399/582/anime-naruto-madara-uchiha-wallpaper-preview.jpg",
-  A2 = "https://wallpapercave.com/wp/wp8241464.jpg",
-  A3 = "https://wallpapercave.com/wp/wp5823743.jpg",
+  DEFAULT = "/src/assets/images/avatar/clown.JPEG",
+  AI = "/src/assets/images/avatar/child_female.JPEG",
+  A2 = "/src/assets/images/avatar/woman.JPEG",
+  A3 = "/src/assets/images/avatar/man.JPEG",
+  A4 = "/src/assets/images/avatar/child_male.JPEG",
 }
 
 export enum LocalStorageKeys {

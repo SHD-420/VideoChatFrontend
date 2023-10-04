@@ -2,7 +2,7 @@
   .#{$transition-name}-enter-active,
   .#{$transition-name}-leave-active {
     transition-duration: $duration;
-    transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1)
+    transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
   }
 
   .#{$transition-name}-enter-from,
@@ -16,7 +16,7 @@
 }
 
 @include _simple-transition(slide-y) {
-  transform: translateY(200px);
+  transform: scaleX(0.75) translateY(-120px);
   opacity: 0;
 }
 

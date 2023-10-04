@@ -1,17 +1,13 @@
 @use "../vars";
 
-$_hover_darken_amoount: 20%;
-
 button,
 .btn {
   border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
+  padding: 1rem 1.5rem;
+  border-radius: 0.25rem;
+  font-size: 1rem;
   cursor: pointer;
-  font-weight: 500;
-  transition: 0.2s;
   background-color: transparent;
-  color: vars.$light1;
 
   &:disabled,
   &.disabled {
@@ -23,21 +19,25 @@ button,
     outline: none;
   }
 
+  &:active {
+    transform: scale(0.95);
+  }
+
   &.primary {
-    color: vars.$light1;
-
-    background-image: linear-gradient(
-      to right,
-      vars.$primary,
-      rgba(vars.$secondary, 0.5)
-    );
-
-    &:focus {
-      box-shadow: 0 0 0 0.2rem rgba(vars.$primary, 0.5);
-    }
+    color: map-get(vars.$gray, 800);
+    background-color: vars.$primary;
 
     &:hover {
-      background-color: darken(vars.$primary, $_hover_darken_amoount);
+      background-color: lighten(vars.$primary, 10%);
+    }
+  }
+
+  &.secondary {
+    color: map-get(vars.$gray, 100);
+    background-color: map-get(vars.$gray, 400);
+
+    &:hover {
+      background-color: lighten(map-get(vars.$gray, 400), 10%);
     }
   }
 }

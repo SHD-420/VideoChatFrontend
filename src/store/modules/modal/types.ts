@@ -1,10 +1,10 @@
-import { ComponentOptions } from "vue";
+import type { Component } from "vue";
 
 export interface ModalState {
   shouldShow?: boolean;
   isClosable?: boolean;
   onSuccess?: () => void;
-  component?: ComponentOptions;
+  component?: Component;
 }
 
 export enum ModalMutationTypes {

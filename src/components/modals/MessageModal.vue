@@ -4,7 +4,7 @@
     <div v-else-if="type === 'error'" class="msg-modal__error">
       <font-awesome-icon icon="times"></font-awesome-icon>
     </div>
-    <p class="text-center mt-lg text-medium px-xl py-sm">
+    <p>
       {{ message }}
     </p>
   </div>
@@ -29,27 +29,27 @@ export default defineComponent({
 
 <style  lang="scss" scoped>
 .msg-modal {
-  background: $dark2;
+  padding: 1rem 2rem;
   p {
-    color: $light3;
-    background-color: $dark1;
+    color: map-get($gray,400);
   }
   &__spinner {
     margin: auto;
-    @include sqr(100px);
+    margin-bottom: 1rem;
+    @include sqr(40px);
     border: 0.25rem solid $primary;
     border-bottom-color: transparent;
     border-radius: 50%;
     animation: spin 0.5s linear infinite;
   }
-  &__error {
+  // &__error {
     // background: $error;
     // box-sizing: content-box;
     // color: $light1;
     // width: max-content;
     // margin: auto;
     // border-radius: 4rem;
-  }
+  // }
   @keyframes spin {
     from {
       transform: rotate(0deg);

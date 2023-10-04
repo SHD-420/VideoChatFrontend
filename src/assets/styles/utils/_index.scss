@@ -1,6 +1,7 @@
 @forward "buttons";
 @forward "inputs";
 @forward "transitions";
+@forward "typography";
 
 @use "../vars";
 
@@ -12,11 +13,6 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  color: vars.$light1;
-}
-
-html {
-  background-color: vars.$dark2;
 }
 
 body {
@@ -40,5 +36,6 @@ ul {
 }
 
 #modals {
+  position: relative;
   z-index: 1000;
 }

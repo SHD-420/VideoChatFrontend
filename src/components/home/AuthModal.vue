@@ -1,27 +1,21 @@
 <template>
   <div class="auth-modal">
-    <p class="text-secondary">
-      Please enter a name and choose an avatar to continue
-    </p>
-    <input type="text" placeholder="Enter a name" v-model="currentName" />
-    <div>
-      <div class="auth-modal__field">
-        <div class="auth-modal__avatar auth-modal__avatar--current">
-          <img :src="currentAvatar" alt="Current Avatar" />
-        </div>
-        <div class="d-flex">
-          <div
-            v-for="(url, name) in allAvatars"
-            :key="name"
-            class="auth-modal__avatar"
-            :class="{ 'auth-modal__avatar--active': url === currentAvatar }"
-            @click="setAvatar(url)"
-          >
-            <img :src="url" :alt="name" />
-          </div>
-        </div>
-      </div>
-    </div>
+    <p>Enter your name:</p>
+    <input type="text" placeholder="Type here..." v-model="currentName" />
+    <p>Pick an avatar:</p>
+    <ul class="auth-modal__avatars">
+      <li
+        v-for="(url, name) in allAvatars"
+        :key="name"
+        class="auth-modal__avatar"
+        :class="{ 'auth-modal__avatar--active': url === currentAvatar }"
+        @click="setAvatar(url)"
+        role="button"
+        tabindex="0"
+      >
+        <img :src="url" :alt="name" />
+      </li>
+    </ul>
     <button
       class="primary"
       :disabled="!currentName"
@@ -67,30 +61,49 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .auth-modal {
-  display: grid;
-  grid-auto-flow: row;
-  row-gap: 1rem;
   padding: 2rem;
-  &__field {
-    width: max-content;
-    margin: auto;
+  padding-top: 0;
+  width: 512px;
+  
+  p {
+    color: map-get($gray, 400);
+    margin-bottom: 1rem;
   }
+  input {
+    border: 1px solid rgba(map-get($gray, 200), 0.5);
+    width: 100%;
+    border-radius: 0.25rem;
+    margin-bottom: 3rem;
+    &:focus {
+      box-shadow: 0 0 0 0.25rem rgba($primary, 0.25);
+    }
+  }
+
   &__avatar {
-    @include sqr(60px);
+    @include sqr(48px);
     border-radius: 50%;
     overflow: hidden;
     cursor: pointer;
     margin: 0.5rem;
-    &--active {
-      box-shadow: 0 0 16px $primary;
+    opacity: 0.75;
+    transition-property: transform;
+    transition-duration: 150ms;
+    transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    &:hover {
+      opacity: 1;
     }
-    &--current {
-      @include sqr(75px);
-      margin: 2rem auto;
+    &--active {
+      opacity: 1;
+      transform: scale(1.25);
     }
   }
+
+  &__avatars {
+    display: flex;
+  }
+
   button {
-    margin-top: 2rem;
+    margin-top: 3rem;
   }
 }
 </style>

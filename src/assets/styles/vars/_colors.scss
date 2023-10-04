@@ -1,4 +1,7 @@
-$primary: #FF5C00;
+@use "sass:map";
+
+$primary: #20FFD7;
+$primary-light: #D2FFF7;
 $secondary: #CB00AA;
 
 $light1: #FFF;
@@ -8,3 +11,11 @@ $light3: #EDF8FF;
 $dark1: #111;
 $dark2: #222;
 $error: #CF1D1D;
+
+$gray: (
+    100: white,
+    200: #C4CFD1,
+    400: #6A7E92,
+    600: #2D4A65,
+    800: #153C29,
+);
