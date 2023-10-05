@@ -21,50 +21,41 @@
   </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent } from "vue";
+<script setup lang="ts">
 import { useStore } from "@/store";
 import {
-  MediaActionTypes,
-  MediaMutationTypes,
+MediaActionTypes,
+MediaMutationTypes,
 } from "@/store/modules/media/types";
-import { mapMutations } from "vuex";
 import { ModalMutationTypes } from "@/store/modules/modal/types";
 import {
-  mdiMicrophone,
-  mdiMicrophoneOff,
-  mdiVideo,
-  mdiVideoOff,
+mdiMicrophone,
+mdiMicrophoneOff,
+mdiVideo,
+mdiVideoOff,
 } from "@mdi/js";
+import { computed } from "vue";
+import { mapMutations } from "vuex";
 import BaseIcon from "../base/BaseIcon.vue";
 
-export default defineComponent({
-  emits: ["closed"],
-  setup(_, { emit }) {
-    const store = useStore();
-    const mediaState = computed(() => store.state.media);
-    function handleContinue() {
-      const { onSuccess } = store.state.modal;
-      emit("closed");
-      store.commit(ModalMutationTypes.HIDE_MODAL);
-      if (mediaState.value.stream && onSuccess) onSuccess();
-    }
-    store.dispatch(MediaActionTypes.INITIALIZE_MEDIA);
-    return {
-      mdiVideo,
-      mdiVideoOff,
-      mdiMicrophone,
-      mdiMicrophoneOff,
-      mediaState,
-      handleContinue,
-      ...mapMutations([
-        MediaMutationTypes.TOGGLE_VIDEO,
-        MediaMutationTypes.TOGGLE_AUDIO,
-      ]),
-    };
-  },
-  components: { BaseIcon },
-});
+const emit = defineEmits<(e: "closed") => void>();
+
+const store = useStore();
+const mediaState = computed(() => store.state.media);
+
+function handleContinue() {
+  const { onSuccess } = store.state.modal;
+  emit("closed");
+  store.commit(ModalMutationTypes.HIDE_MODAL);
+  if (mediaState.value.stream && onSuccess) onSuccess();
+}
+
+store.dispatch(MediaActionTypes.INITIALIZE_MEDIA);
+
+const { TOGGLE_AUDIO, TOGGLE_VIDEO } = mapMutations([
+  MediaMutationTypes.TOGGLE_VIDEO,
+  MediaMutationTypes.TOGGLE_AUDIO,
+]);
 </script>
 
 <style scoped lang="scss">

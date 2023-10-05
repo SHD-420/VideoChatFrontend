@@ -24,56 +24,43 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import BaseVideo from "@/components/room/BaseVideo.vue";
 import { UserIdentity } from "@/plugins/RTC/types";
 import { RouteNames } from "@/router/types";
 import { useStore } from "@/store";
-import { computed, defineComponent } from "vue";
+import { computed } from "vue";
 import { useRouter } from "vue-router";
 import DefaultLayoutSideBar from "./DefaultLayoutSideBar.vue";
 import MediaControls from "./MediaControls.vue";
 
-export default defineComponent({
-  props: {
-    activeMemberId: {
-      type: String,
-      default: null,
-    },
-  },
-  components: { DefaultLayoutSideBar, BaseVideo, MediaControls },
-  emits: ["self-pinned"],
-  setup(props, { emit }) {
-    const router = useRouter();
-    const store = useStore();
+const props = defineProps<{
+  activeMemberId?: string;
+}>();
 
-    function pinSelfVideo() {
-      emit("self-pinned");
-    }
-    function leaveRoom() {
-      router.push({ name: RouteNames.Home });
-    }
+const emit = defineEmits<(e: "self-pinned") => void>();
 
-    const selfMemberData = computed(() => ({
-      isVideoEnabled: store.state.media.isVideoEnabled,
-      stream: store.state.media.stream as MediaStream,
-      identity: store.state.auth as UserIdentity,
-    }));
+const router = useRouter();
+const store = useStore();
 
-    const activeMemberData = computed(
-      () =>
-        store.state.room.members.get(props.activeMemberId) ||
-        selfMemberData.value
-    );
+function pinSelfVideo() {
+  emit("self-pinned");
+}
+function leaveRoom() {
+  router.push({ name: RouteNames.Home });
+}
 
-    return {
-      selfMemberData,
-      activeMemberData,
-      pinSelfVideo,
-      leaveRoom,
-    };
-  },
-});
+const selfMemberData = computed(() => ({
+  isVideoEnabled: store.state.media.isVideoEnabled,
+  stream: store.state.media.stream as MediaStream,
+  identity: store.state.auth as UserIdentity,
+}));
+
+const activeMemberData = computed(() =>
+  props.activeMemberId
+    ? store.state.room.members.get(props.activeMemberId) || selfMemberData.value
+    : selfMemberData.value
+);
 </script>
 
 <style scoped lang="scss">
@@ -83,17 +70,20 @@ export default defineComponent({
     @include overlap-children;
   }
   &__my-video {
-    // @extend .m-sm;
     width: 8rem;
     height: 10rem;
     border-radius: 0.25rem;
     z-index: 1;
     justify-self: end;
     overflow: hidden;
+    margin: 0.25rem;
+    background-color: map-get($gray, 100);
+    box-shadow: 0 2px 4px 0 rgba(map-get($gray, 800), 0.1);
   }
   &__active-video {
     width: 100%;
     height: 30rem;
+    border-bottom: 1px solid map-get($gray, 200);
   }
 }
 </style>

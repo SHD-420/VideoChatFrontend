@@ -33,11 +33,20 @@ button,
   }
 
   &.secondary {
-    color: map-get(vars.$gray, 100);
-    background-color: map-get(vars.$gray, 400);
+    color: map-get(vars.$gray, 600);
+    background-color: map-get(vars.$gray, 200);
 
     &:hover {
-      background-color: lighten(map-get(vars.$gray, 400), 10%);
+      background-color: lighten(map-get(vars.$gray, 200), 10%);
+    }
+  }
+
+  &.danger {
+    color: vars.$danger-light;
+    background-color: vars.$danger;
+
+    &:hover {
+      background-color: darken(vars.$danger, 10%);
     }
   }
 }

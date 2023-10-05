@@ -11,8 +11,8 @@ interface WSOutgoingMessage {
 }
 
 export class WSClient {
-  private _ws = new WebSocket("ws://localhost:8000");
-  // private _ws = new WebSocket("ws://192.168.43.196:8000");
+  // private _ws = new WebSocket("ws://localhost:8000");
+  private _ws = new WebSocket("ws://192.168.18.21:8000");
   // private _ws = new WebSocket(`ws://${location.host}`);
   // private _ws = new WebSocket(`wss://${location.host}`);
   // private _ws = new WebSocket("ws://192.168.43.223:8000");

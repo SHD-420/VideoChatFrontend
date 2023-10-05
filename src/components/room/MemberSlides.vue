@@ -51,7 +51,6 @@ export default defineComponent({
   grid-template-rows: 160px;
   grid-auto-columns: 160px;
   column-gap: 0.25rem;
-  background: $dark2;
 
   overflow-x: scroll;
   scrollbar-width: thin;
