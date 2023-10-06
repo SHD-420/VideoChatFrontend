@@ -6,7 +6,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent } from "vue";
 import { useStore } from "@/store";
 import { ModalMutationTypes } from "@/store/modules/modal/types";
 

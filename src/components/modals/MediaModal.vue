@@ -24,15 +24,15 @@
 <script setup lang="ts">
 import { useStore } from "@/store";
 import {
-MediaActionTypes,
-MediaMutationTypes,
+  MediaActionTypes,
+  MediaMutationTypes,
 } from "@/store/modules/media/types";
 import { ModalMutationTypes } from "@/store/modules/modal/types";
 import {
-mdiMicrophone,
-mdiMicrophoneOff,
-mdiVideo,
-mdiVideoOff,
+  mdiMicrophone,
+  mdiMicrophoneOff,
+  mdiVideo,
+  mdiVideoOff,
 } from "@mdi/js";
 import { computed } from "vue";
 import { mapMutations } from "vuex";
@@ -60,7 +60,12 @@ const { TOGGLE_AUDIO, TOGGLE_VIDEO } = mapMutations([
 
 <style scoped lang="scss">
 .joining-modal {
-  width: 512px;
+  min-width: 90vw;
+
+  @include mq(sm) {
+    min-width: 512px;
+  }
+
   video {
     width: 100%;
     height: 240px;

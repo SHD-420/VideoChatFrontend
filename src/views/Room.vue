@@ -35,7 +35,7 @@ const store = useStore();
 const router = useRouter();
 const ws = useWebSockets();
 const roomId = computed(() => store.state.room.id);
-const shouldShowExpanded = ref(true);
+const shouldShowExpanded = ref(false);
 const activeMemberId = ref<string>("");
 
 const pinMember = (newId: string) => (activeMemberId.value = newId);

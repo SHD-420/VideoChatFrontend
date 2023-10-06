@@ -13,6 +13,7 @@
         role="button"
         tabindex="0"
       >
+        <span></span>
         <img :src="url" :alt="name" />
       </li>
     </ul>
@@ -30,6 +31,7 @@
 import { useStore } from "@/store";
 import { AuthMutationTypes, AvatarURLS } from "@/store/modules/auth/types";
 import { computed, ref } from "vue";
+import { mdiCheck } from "@mdi/js";
 
 const emit = defineEmits<(e: "closed") => void>();
 
@@ -52,7 +54,11 @@ function handleContinue() {
 .auth-modal {
   padding: 2rem;
   padding-top: 0;
-  width: 512px;
+
+  min-width: 90vw;
+  @include mq(sm) {
+    min-width: 512px;
+  }
 
   p {
     color: map-get($gray, 400);
@@ -68,27 +74,47 @@ function handleContinue() {
     }
   }
 
+  $avatar-diameter: 56px;
+  $avatar-padding: 0.25rem;
+
   &__avatar {
-    @include sqr(48px);
-    border-radius: 50%;
-    overflow: hidden;
+    @include sqr($avatar-diameter);
+    padding: $avatar-padding;
     cursor: pointer;
-    margin: 0.5rem;
     opacity: 0.75;
     transition-property: transform;
     transition-duration: 150ms;
     transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+
+    span {
+      @include sqr(1rem);
+      justify-self:end;
+      background-color: $primary;
+      transform: translate(50%, -50%);
+      border-radius: 50%;
+    }
+
+    img {
+      border-radius: 50%;
+    }
+
     &:hover {
       opacity: 1;
     }
     &--active {
       opacity: 1;
       transform: scale(1.25);
+      @include overlap-children;
     }
   }
 
   &__avatars {
-    display: flex;
+    display: grid;
+    place-items: center;
+    grid-template-columns: repeat(
+      auto-fit,
+      calc($avatar-diameter + $avatar-padding * 2)
+    );
   }
 
   button {

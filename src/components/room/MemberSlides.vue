@@ -2,7 +2,7 @@
   <ul class="member-slides">
     <li
       class="member-slides__item"
-      v-for="member in [...storeMembers,...storeMembers,...storeMembers]"
+      v-for="member in storeMembers"
       :key="member.id"
       :class="{ 'member-slides__item--active': currentMemberId === member.id }"
     >

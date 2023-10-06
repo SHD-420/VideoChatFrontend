@@ -98,12 +98,13 @@ const copyJoinLink = () => navigator.clipboard.writeText(joinLink);
     z-index: 2;
     padding: 1rem;
     color: map-get($gray, 600);
-    width: calc(100% - 1rem);
     height: 100%;
     position: fixed;
     top: 0;
     background: map-get($gray, 100);
     box-shadow: 8px 0 40px rgba(map-get($gray, 800), 0.5);
+
+    width: min(344px, calc(100% - 1rem));
 
     button:not(.secondary, .danger) {
       margin-bottom: 1rem;

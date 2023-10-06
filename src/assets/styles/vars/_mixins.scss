@@ -30,7 +30,7 @@ $_breakpts: (
 );
 
 @mixin mq($size) {
-  @media screen and (max-width: map-get($_breakpts,$size)) {
+  @media screen and (min-width: map-get($_breakpts,$size)) {
     @content;
   }
 }

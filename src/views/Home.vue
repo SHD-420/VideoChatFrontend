@@ -24,14 +24,19 @@
         </div>
       </aside>
       <div class="home__actions">
-        <p>Enter room code to join:</p>
+        <p>Enter room id to join:</p>
         <form @submit.prevent="joinRoom()">
           <input
             type="text"
-            placeholder="Enter code here"
+            placeholder="Enter id here"
             v-model="roomIdInput"
+            minlength="6"
+            maxlength="6"
+            required
+            pattern="[A-F,a-f,0-9]*"
+            title="Only digits and english letters till 'f'."
           />
-          <button class="primary" :disabled="isRoomIdInValid">
+          <button class="primary">
             <base-icon :icon="mdiArrowRight" />
           </button>
         </form>
@@ -59,6 +64,14 @@
   </main>
 </template>
 
+<!-- <script lang="ts">
+export default {
+  mounted() {
+    (this.$refs.x as HTMLInputElement).setCustomValidity("error");
+  },
+};
+</script> -->
+
 <script lang="ts" setup>
 import Logo from "@/components/Logo.vue";
 import { useWebSockets } from "@/plugins/WebSockets";
@@ -66,7 +79,7 @@ import { useRouter } from "@/router";
 import { RouteNames } from "@/router/types";
 import { useStore } from "@/store";
 import { ModalMutationTypes } from "@/store/modules/modal/types";
-import { onMounted, ref, computed } from "vue";
+import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import BaseIcon from "@/components/base/BaseIcon.vue";
 import { mdiArrowRight, mdiLightbulb } from "@mdi/js";
@@ -77,7 +90,6 @@ const store = useStore();
 const ws = useWebSockets();
 
 const roomIdInput = ref("");
-const isRoomIdInValid = computed(() => roomIdInput.value.length !== 6);
 
 function prepareUser() {
   return new Promise<void>((resolve) => {
@@ -126,25 +138,39 @@ onMounted(() => {
   }
 
   img {
-    @include sqr(512px);
+    @include sqr();
     opacity: 0.1;
-    transform: translate(-64px, -64px);
     z-index: -1;
+
+    @include mq(sm) {
+      @include sqr(512px);
+      transform: translate(-64px, -64px);
+    }
   }
 
   &__hero {
     width: min(920px, 100%);
-    padding: 0 2rem;
-    margin: 4rem auto 0 auto;
-    display: grid;
-    grid-template-columns: 3fr 2fr;
-    gap: 3rem;
+    margin: 1rem 0;
+    padding: 0 1rem;
+    @include mq(sm) {
+      padding: 0 2rem;
+    }
+
+    @include mq(md) {
+      margin: 4rem auto 0 auto;
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      gap: 3rem;
+    }
   }
 
   h1 {
-    margin-top: 1.5rem;
-    margin-bottom: 2.5rem;
     color: map-get($gray, 600);
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    @include mq(md) {
+      margin-bottom: 2.5rem;
+    }
   }
 
   &__shapes {
@@ -168,15 +194,24 @@ onMounted(() => {
       color: map-get($gray, 400);
     }
     form {
-      margin-bottom: 4rem;
       border: 1px solid rgba(map-get($gray, 200), 0.5);
-      width: max-content;
+      width: min(24rem, 100%);
       border-radius: 0.25rem;
       padding: 0.25rem;
       display: flex;
+      margin-bottom: 1rem;
+      @include mq(md) {
+        margin-bottom: 4rem;
+      }
       &:focus-within {
         box-shadow: 0 0 0 0.25rem rgba($primary, 0.25);
       }
+
+      input {
+        flex-grow: 1;
+        width: 0;
+      }
+
       button {
         border-radius: 0;
         @include sqr(3rem);
@@ -188,10 +223,23 @@ onMounted(() => {
 }
 
 .info {
-  @include overlap-children;
-  width: min(1024px, 100%);
   margin: auto;
   margin-bottom: 1rem;
+  display: none;
+
+  @include mq(sm) {
+    @include overlap-children;
+  }
+
+  margin-top: 1rem;
+  @include mq(md) {
+    margin-top: 0;
+  }
+
+  width: calc(100% - 4rem);
+  @include mq(lg) {
+    width: min(980px, 100%);
+  }
 
   &__bulb,
   &__text {
