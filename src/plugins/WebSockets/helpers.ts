@@ -18,8 +18,6 @@ export function useRoomHelpers(wsclient: WSClient, store: TypedStore) {
 
   function joinRoom(roomId: string): Promise<void> {
     return new Promise((resolve, reject) => {
-      console.log("joining room" + roomId);
-
       const { username, avatar } = store.state.auth;
 
       if (username && avatar) {

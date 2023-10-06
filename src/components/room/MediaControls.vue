@@ -12,7 +12,7 @@
       <base-icon :icon="mdiCameraFlip" />
     </button>
     <!-- <div class="media-controls__layout-change d-flex bg-dark">
-      <button class="text-white large" @click="expandLayout()">
+      <button class="text-white large" @click="$emit('exp')">
       </button>
     </div> -->
   </div>

@@ -69,9 +69,6 @@ export class PrematureMember {
           this._handleDCOpen(config.myIdentity, config.myMediaState)
         );
       });
-    conn.addEventListener("connectionstatechange", () =>
-      console.log(conn.connectionState)
-    );
   }
 
   private _handleTrack({ streams: [_stream], track }: RTCTrackEvent) {

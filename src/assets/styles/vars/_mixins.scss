@@ -21,3 +21,16 @@
     grid-row: 1;
   }
 }
+
+$_breakpts: (
+  sm: 576px,
+  md: 768px,
+  lg: 1024px,
+  xl: 1200px,
+);
+
+@mixin mq($size) {
+  @media screen and (max-width: map-get($_breakpts,$size)) {
+    @content;
+  }
+}

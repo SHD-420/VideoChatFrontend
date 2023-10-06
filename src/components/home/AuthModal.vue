@@ -5,7 +5,7 @@
     <p>Pick an avatar:</p>
     <ul class="auth-modal__avatars">
       <li
-        v-for="(url, name) in allAvatars"
+        v-for="(url, name) in AvatarURLS"
         :key="name"
         class="auth-modal__avatar"
         :class="{ 'auth-modal__avatar--active': url === currentAvatar }"
@@ -26,37 +26,26 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { useStore } from "@/store";
 import { AuthMutationTypes, AvatarURLS } from "@/store/modules/auth/types";
+import { computed, ref } from "vue";
 
-import { computed, defineComponent, ref } from "vue";
+const emit = defineEmits<(e: "closed") => void>();
 
-export default defineComponent({
-  emits: ["closed"],
-  setup() {
-    const store = useStore();
-    const currentName = ref(store.state.auth?.username);
-    const currentAvatar = computed(() => store.state.auth?.avatar as string);
-    function setAvatar(newAvatar: AvatarURLS) {
-      store.commit(AuthMutationTypes.SET_AVATAR, newAvatar);
-    }
-    function handleContinue() {
-      if (currentName.value) {
-        store.commit(AuthMutationTypes.SET_USERNAME, currentName.value);
-        const successHandler = store.state.modal.onSuccess;
-        if (successHandler) successHandler();
-      }
-    }
-    return {
-      setAvatar,
-      handleContinue,
-      currentAvatar,
-      currentName,
-      allAvatars: AvatarURLS,
-    };
-  },
-});
+const store = useStore();
+const currentName = ref(store.state.auth?.username);
+const currentAvatar = computed(() => store.state.auth?.avatar as string);
+function setAvatar(newAvatar: AvatarURLS) {
+  store.commit(AuthMutationTypes.SET_AVATAR, newAvatar);
+}
+function handleContinue() {
+  if (currentName.value) {
+    store.commit(AuthMutationTypes.SET_USERNAME, currentName.value);
+    const successHandler = store.state.modal.onSuccess;
+    if (successHandler) successHandler();
+  }
+}
 </script>
 
 <style scoped lang="scss">
@@ -64,7 +53,7 @@ export default defineComponent({
   padding: 2rem;
   padding-top: 0;
   width: 512px;
-  
+
   p {
     color: map-get($gray, 400);
     margin-bottom: 1rem;

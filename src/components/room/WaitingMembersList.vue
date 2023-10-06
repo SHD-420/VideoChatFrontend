@@ -23,9 +23,6 @@
     </ul>
     <div class="pb-xs bg-fade-pr"></div>
   </div>
-  <p v-else class="empty-list text-center text-white py-sm">
-    No members in waiting
-  </p>
 </template>
 
 <script setup lang="ts">
@@ -42,6 +39,11 @@ const waitingMembers = computed(() => store.state.room.waitingMembers);
 
 <style scoped lang="scss">
 .waiting-members {
+  margin-bottom: 1rem;
+  background-color: rgba(map-get($gray,200),0.25);
+  padding: 0.5rem 1em;
+  border-radius: 0.25rem;
+
   &__title {
     display: flex;
     align-items: center;
@@ -54,7 +56,7 @@ const waitingMembers = computed(() => store.state.room.waitingMembers);
     padding: 0.5rem 0;
 
     &:not(:last-child) {
-      border-bottom: 1px solid rgba(map-get($gray, 200), 0.25);
+      border-bottom: 1px solid rgba(map-get($gray, 200), 0.5);
     }
 
     img {
@@ -67,8 +69,5 @@ const waitingMembers = computed(() => store.state.room.waitingMembers);
       padding: 0.5rem;
     }
   }
-}
-.empty-list {
-  opacity: 0.5;
 }
 </style>

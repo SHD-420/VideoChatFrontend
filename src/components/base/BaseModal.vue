@@ -57,8 +57,9 @@ function closeModal() {
   }
   &__content {
     height: max-content;
-    margin: 2rem auto;
-    width: max-content;
+    justify-self: center;
+    margin: 2rem;
+    max-width: max-content;
     border-radius: 0.25rem;
     background-color: map-get($gray, 100);
     box-shadow: 0 4px 16px rgba(map-get($gray, 800), 0.1);
@@ -70,6 +71,14 @@ function closeModal() {
       padding: 1rem;
       font-size: 1.5rem;
       color: map-get($gray, 400);
+    }
+  }
+}
+
+@include mq(sm) {
+  .base-modal {
+    &__content {
+      margin: 0.5rem;
     }
   }
 }

@@ -1,8 +1,8 @@
 <template>
-  <ul class="member-slides py-xl">
+  <ul class="member-slides">
     <li
       class="member-slides__item"
-      v-for="member in storeMembers"
+      v-for="member in [...storeMembers,...storeMembers,...storeMembers]"
       :key="member.id"
       :class="{ 'member-slides__item--active': currentMemberId === member.id }"
     >
@@ -12,40 +12,41 @@
         :isVideoEnabled="member.isVideoEnabled"
         :isSizeSmall="true"
       ></base-video>
-      <button class="primary icon my-sm small" @click="pinMember(member.id)">
-        <font-awesome-icon icon="arrow-up"></font-awesome-icon>
+      <button class="primary" @click="pinMember(member.id)">
+        <base-icon :icon="mdiArrowUp" size="xs" />
       </button>
     </li>
   </ul>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { useStore } from "@/store";
-import { computed, defineComponent, ref } from "vue";
+import { computed, ref } from "vue";
 import BaseVideo from "./BaseVideo.vue";
+import { mdiArrowUp } from "@mdi/js";
+import BaseIcon from "../base/BaseIcon.vue";
 
-export default defineComponent({
-  components: { BaseVideo },
-  emits: ["member-pinned", "self-pinned"],
-  setup(_, { emit }) {
-    const store = useStore();
-    const storeMembers = computed(() =>
-      [...store.state.room.members].map(([id, member]) => ({ id, ...member }))
-    );
-    const currentMemberId = ref<string>("");
+const emit = defineEmits<{
+  (e: "member-pinned", d: string): void;
+  (e: "self-pinned"): void;
+}>();
 
-    function pinMember(newMemberId: string) {
-      currentMemberId.value = newMemberId;
-      emit("member-pinned", newMemberId);
-    }
+const store = useStore();
+const storeMembers = computed(() =>
+  [...store.state.room.members].map(([id, member]) => ({ id, ...member }))
+);
+const currentMemberId = ref<string>("");
 
-    return { pinMember, currentMemberId, storeMembers };
-  },
-});
+function pinMember(newMemberId: string) {
+  currentMemberId.value = newMemberId;
+  emit("member-pinned", newMemberId);
+}
 </script>
 
 <style lang="scss" scoped>
 .member-slides {
+  margin-top: 1rem;
+  padding: 0.5rem;
   display: grid;
   grid-auto-flow: column;
   grid-template-rows: 160px;
@@ -54,37 +55,41 @@ export default defineComponent({
 
   overflow-x: scroll;
   scrollbar-width: thin;
-  scrollbar-color: rgba($light1, 0.5) transparent;
+
+  $scrollbar-color: rgba(map-get($gray, 200), 0.5);
+  scrollbar-color: $scrollbar-color;
 
   &::-webkit-scrollbar {
     background-color: transparent;
     height: 0.5rem;
   }
   &::-webkit-scrollbar-thumb {
-    background-color: rgba($light3, 0.25);
-    border-radius: 2rem;
+    background-color: $scrollbar-color;
     &:hover {
-      background-color: rgba($light1, 0.5);
+      background-color: map-get($gray, 200);
     }
   }
   &__item {
     @include overlap-children();
     grid-template-rows: 100%;
-    border-radius: 0.5rem;
+    border: 1px solid map-get($gray, 200);
+    border-radius: 0.25rem;
     overflow: hidden;
     transition: 0.2s ease-in;
     z-index: 1;
+    &--active {
+      border: 1px solid map-get($gray, 400);
+    }
     button {
       align-self: flex-end;
       justify-self: center;
+      padding: 0.75rem;
       transition: 0.2s;
       transform: translateY(120%);
-      z-index: 100;
     }
     &:hover {
-      box-shadow: inset 0 0 0px 0.25rem rgba($primary, 0.75);
       button {
-        transform: translateY(0);
+        transform: translateY(-20%);
       }
     }
   }

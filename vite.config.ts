@@ -11,8 +11,7 @@ export default defineConfig({
   css:{
     preprocessorOptions: {
       scss: {
-        additionalData : `@use "@/assets/styles" as *;
-                          @use '@/assets/styles/media-queries';`,
+        additionalData : `@use "@/assets/styles" as *;`,
       }
     }
   },

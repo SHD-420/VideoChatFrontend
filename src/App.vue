@@ -5,14 +5,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
 import BaseModal from "./components/base/BaseModal.vue";
-
-export default defineComponent({
-    name: "App",
-    components: { BaseModal }
-});
 </script>
 
 <style lang="scss">
