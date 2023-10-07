@@ -13,7 +13,9 @@
         role="button"
         tabindex="0"
       >
-        <span></span>
+        <span>
+          <base-icon size="xs" :icon="mdiCheck" />
+        </span>
         <img :src="url" :alt="name" />
       </li>
     </ul>
@@ -32,8 +34,11 @@ import { useStore } from "@/store";
 import { AuthMutationTypes, AvatarURLS } from "@/store/modules/auth/types";
 import { computed, ref } from "vue";
 import { mdiCheck } from "@mdi/js";
+import BaseIcon from "../base/BaseIcon.vue";
 
 const emit = defineEmits<(e: "closed") => void>();
+
+const getUrl = (url: string) => new URL(url, import.meta.url).href;
 
 const store = useStore();
 const currentName = ref(store.state.auth?.username);
@@ -87,11 +92,13 @@ function handleContinue() {
     transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
 
     span {
-      @include sqr(1rem);
-      justify-self:end;
-      background-color: $primary;
-      transform: translate(50%, -50%);
+      @include sqr(1.5rem);
+      justify-self: end;
+      background-color: $primary-light;
+      color: map-get($gray, 800);
       border-radius: 50%;
+      display: none;
+      transform: translate(50%, -50%);
     }
 
     img {
@@ -105,12 +112,18 @@ function handleContinue() {
       opacity: 1;
       transform: scale(1.25);
       @include overlap-children;
+
+      span {
+        display: grid;
+        place-content: center;
+      }
     }
   }
 
   &__avatars {
     display: grid;
     place-items: center;
+    gap: 0.5rem;
     grid-template-columns: repeat(
       auto-fit,
       calc($avatar-diameter + $avatar-padding * 2)

@@ -3,17 +3,6 @@
   height: $side;
 }
 
-@mixin pseudo() {
-  &::before {
-    content: "";
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    @content;
-  }
-}
-
 @mixin overlap-children() {
   display: grid;
   & > * {

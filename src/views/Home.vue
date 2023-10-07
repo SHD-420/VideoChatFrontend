@@ -64,14 +64,6 @@
   </main>
 </template>
 
-<!-- <script lang="ts">
-export default {
-  mounted() {
-    (this.$refs.x as HTMLInputElement).setCustomValidity("error");
-  },
-};
-</script> -->
-
 <script lang="ts" setup>
 import Logo from "@/components/Logo.vue";
 import { useWebSockets } from "@/plugins/WebSockets";
