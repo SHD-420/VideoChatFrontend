@@ -1,9 +1,9 @@
 export enum AvatarURLS {
-  DEFAULT = "/src/assets/images/avatar/clown.JPEG",
-  AI = "/src/assets/images/avatar/child_female.JPEG",
-  A2 = "/src/assets/images/avatar/woman.JPEG",
-  A3 = "/src/assets/images/avatar/man.JPEG",
-  A4 = "/src/assets/images/avatar/child_male.JPEG",
+  DEFAULT = "/avatar/clown.JPEG",
+  AI = "/avatar/child_female.JPEG",
+  A2 = "/avatar/woman.JPEG",
+  A3 = "/avatar/man.JPEG",
+  A4 = "/avatar/child_male.JPEG",
 }
 
 export enum LocalStorageKeys {

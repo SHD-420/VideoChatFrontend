@@ -38,8 +38,6 @@ import BaseIcon from "../base/BaseIcon.vue";
 
 const emit = defineEmits<(e: "closed") => void>();
 
-const getUrl = (url: string) => new URL(url, import.meta.url).href;
-
 const store = useStore();
 const currentName = ref(store.state.auth?.username);
 const currentAvatar = computed(() => store.state.auth?.avatar as string);
